@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "329891444276",
+    "firebase_url": "https://smartphone-companion.firebaseio.com",
+    "project_id": "smartphone-companion",
+    "storage_bucket": "smartphone-companion.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:329891444276:android:3b5f0bf668328b64",
+        "android_client_info": {
+          "package_name": "com.project.smartphonecompanionandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "329891444276-shsibt1u4qe67omolj5vkf1brao7s7eu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.project.smartphonecompanionandroid",
+            "certificate_hash": "4510e84745104cac750205b5e376ff8fd736bd84"
+          }
+        },
+        {
+          "client_id": "329891444276-3v97ok491u44e24dinoth5jhp0k58lh0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrfeA_-1e0oxdhjaLXhajaAtr9LCi7C5Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "329891444276-3v97ok491u44e24dinoth5jhp0k58lh0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
