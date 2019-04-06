@@ -1,0 +1,9 @@
+<div class="main-container">
+  <ng-container *ngIf="user$ | async as user; else loading">
+    <h1>{{ user.isAnonymous === true ? "Anonymous user" : user.displayName }}</h1>
+    <h3>{{ idToken }}</h3>
+  </ng-container>
+  <ng-template #loading>
+    <h1>Loading</h1>
+  </ng-template>
+</div>
