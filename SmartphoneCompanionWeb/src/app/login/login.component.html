@@ -1,7 +1,11 @@
 <div class="main-container">
   <ng-container *ngIf="user$ | async as user; else loading">
     <h1>{{ user.isAnonymous === true ? "Anonymous user" : user.displayName }}</h1>
-    <h3>{{ idToken }}</h3>
+    <!--
+    <div style="width: 800px; word-wrap: break-word;">{{ idToken }}</div>
+    -->
+    <ngx-qrcode [qrc-value]="idToken" qrc-class="qr-code" [qrc-element-type]="'img'">
+    </ngx-qrcode>
   </ng-container>
   <ng-template #loading>
     <h1>Loading</h1>
