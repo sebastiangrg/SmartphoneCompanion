@@ -41,6 +41,10 @@ class QRCodeScannerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(
                     requireContext(),
@@ -62,8 +66,8 @@ class QRCodeScannerFragment : Fragment() {
 
         val displayMetrics = DisplayMetrics()
         requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val width = displayMetrics.widthPixels
-        val height = displayMetrics.heightPixels
+        val width = 1024
+        val height = 1024
 
         cameraSource = CameraSource.Builder(requireContext(), barcodeDetector)
             .setRequestedFps(10.0f)

@@ -2,9 +2,7 @@ package com.project.smartphonecompanionandroid.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -18,6 +16,7 @@ class ActiveSessionsFragment : Fragment() {
     private var user: FirebaseUser? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_active_sessions, container, false)
     }
 
@@ -30,9 +29,22 @@ class ActiveSessionsFragment : Fragment() {
             userTextView.text = it
         }
 
-        logOutButton.setOnClickListener { logOut() }
+        addButton.setOnClickListener { addSession() }
+    }
 
-        addButton.setOnClickListener{ addSession() }
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_active_sessions, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.logOutMenuItem -> {
+                logOut()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun addSession() {

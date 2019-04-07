@@ -24,7 +24,9 @@ export class LoginComponent implements OnInit {
         tap((user: User) => {
           if (user) {
             this.uid = user.uid;
-            this.waitForToken();
+            if (!user.phoneNumber) {
+              this.waitForToken();
+            }
           } else {
             this.initUser();
             this.uid = null;
