@@ -50,7 +50,6 @@ export class LoginComponent implements OnInit {
     this.userTokenRef.off();
     this.userTokenRef.on('value', (snapshot: firebase.database.DataSnapshot) => {
       if (snapshot.val()) {
-        console.log(snapshot.val());
         this.authService.linkWithToken(snapshot.val());
         this.userTokenRef.off();
       }
