@@ -27,6 +27,10 @@ export class AuthService {
     }
   }
 
+  public linkWithToken(token: any) {
+    this.afAuth.auth.signInWithCustomToken(token);
+  }
+
   public getUser(): Observable<User> {
     return this.afAuth.user;
   }

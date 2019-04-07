@@ -1,12 +1,16 @@
 <div class="main-container">
-  <button (click)="resetUser()">RESET</button>
   <ng-container *ngIf="user$ | async as user; else loading">
-    <h1>{{ user.isAnonymous === true ? "Anonymous user" : user.displayName }}</h1>
-    <!--
-    <div style="width: 800px; word-wrap: break-word;">{{ idToken }}</div>
-    -->
-    <ngx-qrcode [qrc-value]="idToken" qrc-class="qr-code" [qrc-element-type]="'img'">
-    </ngx-qrcode>
+    <!--Anonymous user-->
+    <ng-container *ngIf="user.isAnonymous">
+      <h1>Anonymous user</h1>
+      <ngx-qrcode [qrc-value]="uid" qrc-class="qr-code" [qrc-element-type]="'img'"></ngx-qrcode>
+    </ng-container>
+
+    <!--Logged user-->
+    <ng-container *ngIf="!user.isAnonymous">
+      <h1>Logged user {{ user.phoneNumber }}</h1>
+      <button (click)="logOut()">Log Out</button>
+    </ng-container>
   </ng-container>
   <ng-template #loading>
     <h1>Loading</h1>

@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         val fragment = supportFragmentManager.findFragmentById(R.id.main_container)
-        if (fragment is VerificationCodeFragment) {
+        if (fragment is VerificationCodeFragment || fragment is QRCodeScannerFragment) {
             super.onBackPressed()
         } else {
             finish()

@@ -34,6 +34,16 @@ fun Activity.clearBackStack() {
     }
 }
 
+fun Activity.goBack() {
+    val manager = (this as AppCompatActivity).supportFragmentManager
+    if (manager.backStackEntryCount > 0) {
+        try {
+            manager.popBackStackImmediate()
+        } catch (ignored: IllegalStateException) {
+        }
+    }
+}
+
 fun Fragment.snackbar(message: String, action: ((View) -> Unit)? = null, actionText: String? = null) {
     this.view?.let {
         Snackbar.make(it, message, Snackbar.LENGTH_LONG).setAction(actionText, action).show()
