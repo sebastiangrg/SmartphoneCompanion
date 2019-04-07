@@ -17,17 +17,25 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit() {
-    this.authService.loginAnonymously();
     this.user$ = this.authService.getUser()
       .pipe(
         tap((user: User) => {
-          console.log(user);
-          user.getIdToken()
-            .then((token: string) => {
-              this.idToken = token;
-            });
+          if (user) {
+            console.log(user);
+            user.getIdToken()
+              .then((token: string) => {
+                this.idToken = token;
+              });
+          } else {
+            this.idToken = null;
+          }
         })
       );
+  }
+
+  async resetUser() {
+    await this.authService.logout();
+    await this.authService.loginAnonymously();
   }
 
 }

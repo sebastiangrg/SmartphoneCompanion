@@ -30,4 +30,8 @@ export class AuthService {
   public getUser(): Observable<User> {
     return this.afAuth.user;
   }
+
+  public logout(): Promise<void> {
+    return this.afAuth.auth.signOut();
+  }
 }

@@ -31,6 +31,13 @@ class ActiveSessionsFragment : Fragment() {
         }
 
         logOutButton.setOnClickListener { logOut() }
+
+        addButton.setOnClickListener{ addSession() }
+    }
+
+    private fun addSession() {
+        val fragment = QRCodeScannerFragment()
+        requireActivity().replaceWith(fragment)
     }
 
     private fun logOut() {

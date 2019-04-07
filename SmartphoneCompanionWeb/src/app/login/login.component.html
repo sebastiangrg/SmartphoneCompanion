@@ -1,4 +1,5 @@
 <div class="main-container">
+  <button (click)="resetUser()">RESET</button>
   <ng-container *ngIf="user$ | async as user; else loading">
     <h1>{{ user.isAnonymous === true ? "Anonymous user" : user.displayName }}</h1>
     <!--
