@@ -104,7 +104,7 @@ class QRCodeScannerFragment : Fragment() {
 
                     if (isValidUID(decoded)) {
                         stopScanning()
-                        loginOnComputer(decoded)
+                        sendUIDToFirebase(decoded)
                     }
                 }
             }
@@ -125,7 +125,7 @@ class QRCodeScannerFragment : Fragment() {
         return value.length in 27..30
     }
 
-    private fun loginOnComputer(token: String) {
+    private fun sendUIDToFirebase(token: String) {
         val database = FirebaseDatabase.getInstance()
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 

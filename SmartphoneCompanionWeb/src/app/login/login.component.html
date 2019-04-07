@@ -9,7 +9,7 @@
     <!--Logged user-->
     <ng-container *ngIf="!user.isAnonymous">
       <h1>Logged user {{ user.phoneNumber }}</h1>
-      <button (click)="logOut()">Log Out</button>
+      <button (click)="logOut()">Sign Out</button>
     </ng-container>
   </ng-container>
   <ng-template #loading>

@@ -39,8 +39,8 @@ class ActiveSessionsFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
-            R.id.logOutMenuItem -> {
-                logOut()
+            R.id.signOutMenuItem -> {
+                signOut()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -52,12 +52,12 @@ class ActiveSessionsFragment : Fragment() {
         requireActivity().replaceWith(fragment)
     }
 
-    private fun logOut() {
+    private fun signOut() {
         FirebaseAuth.getInstance().signOut()
-        goToLogInFlow()
+        goToSignInFlow()
     }
 
-    private fun goToLogInFlow() {
+    private fun goToSignInFlow() {
         if (requireActivity().supportFragmentManager.fragments.find { f -> f is PhoneNumberFragment } != null) {
             requireActivity().clearBackStack()
         }
