@@ -14,12 +14,15 @@ import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.functions.FirebaseFunctions
+import com.google.firebase.functions.FirebaseFunctionsException
 import com.project.smartphonecompanionandroid.utils.goBack
 import com.project.smartphonecompanionandroid.utils.snackbar
 import kotlinx.android.synthetic.main.fragment_qrcode_scanner.*
@@ -125,13 +128,27 @@ class QRCodeScannerFragment : Fragment() {
         return value.length in 27..30
     }
 
-    private fun sendUIDToFirebase(token: String) {
-        val database = FirebaseDatabase.getInstance()
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
+    private fun sendUIDToFirebase(uid: String) {
+        val functions = FirebaseFunctions.getInstance()
 
-        val myRef = database.getReference("users/$userId/webUID")
+        val data = hashMapOf(
+            "webUID" to uid
+        )
 
-        myRef.setValue(token)
+        functions.getHttpsCallable("pairWithUID")
+            .call(data)
+            .addOnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    val e = task.exception
+                    if (e is FirebaseFunctionsException) {
+                        val code = e.code
+                        val details = e.details
+                        Log.d(TAG, "Error code - $code - $details")
+                    }
+                } else {
+                    Log.d(TAG, "Function completed successfully")
+                }
+            }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

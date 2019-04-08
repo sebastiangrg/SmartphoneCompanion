@@ -4,8 +4,7 @@ import * as admin from 'firebase-admin';
 
 admin.initializeApp();
 
-function createCustomToken(context: functions.EventContext) {
-    const auth = context.auth;
+function createCustomToken(auth: any) {
     if (!auth) return null;
 
     const uid = auth.uid;
@@ -14,22 +13,20 @@ function createCustomToken(context: functions.EventContext) {
     return admin.auth().createCustomToken(uid);
 }
 
-export const linkUsers = functions.database.ref("/users/{userId}/webUID").onCreate(async (snapshot, context) => {
-    const customTokenPromise = createCustomToken(context)
-    if (customTokenPromise) {
-        const customToken = await customTokenPromise;
-
-        const webUID = snapshot.val();
-
-        // remove the uid
-        admin.database().ref("/users/" + context.params.userId + "/webUID").remove()
-            .then()
-            .catch(err => {
-                console.log(err)
-            });
-
-        // set the token
-        return admin.database().ref("/users").child(webUID).child("token").set(customToken);
+export const pairWithUID = functions.https.onCall(async (data, context) => {
+    if (context.auth) {
+        const webUID = data.webUID
+        if (webUID) {
+            const customTokenPromise = createCustomToken(context.auth)
+            if (customTokenPromise) {
+                const customToken = await customTokenPromise;
+                return admin.database().ref("/users").child(webUID).child("token").set(customToken);
+            }
+        }
+        console.log("Token creation error");
+        return null;
+    } else {
+        console.log("Auth error");
+        return null;
     }
-    return null;
 });
