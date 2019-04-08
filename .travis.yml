@@ -2,13 +2,17 @@ language: node_js
 node_js:
   - "11.10.0"
 script:
-  - echo "Deploying..."
   - cd SmartphoneCompanionWeb
-  - ng build --prod
+  - ng build --configuration=firebase
+  - cd ..
 install:
+  - npm install -g firebase-tools
+  - cd SmartphoneCompanionFirebase
+  - npm install
+  - cd ..
   - cd SmartphoneCompanionWeb
   - npm install
-  - npm install -g firebase-tools
   - cd ..
 after_success:
+  - cd SmartphoneCompanionFirebase
   - firebase deploy --project smartphone-companion --token $FIREBASE_TOKEN
