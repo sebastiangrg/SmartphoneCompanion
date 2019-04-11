@@ -16,15 +16,21 @@ function createCustomToken(auth: any) {
 export const pairWithUID = functions.https.onCall(async (data, context) => {
     if (context.auth) {
         const webUID = data.webUID
-        if (webUID) {
-            const customTokenPromise = createCustomToken(context.auth)
-            if (customTokenPromise) {
-                const customToken = await customTokenPromise;
-                return admin.database().ref("/users").child(webUID).child("token").set(customToken);
-            }
-        }
-        console.log("Token creation error");
-        return null;
+
+        // check if there is a user with the scanned uid
+        return admin.auth().getUser(webUID)
+            .then(async (_userRecord: admin.auth.UserRecord) => {
+                const customTokenPromise = createCustomToken(context.auth)
+                if (customTokenPromise) {
+                    const customToken = await customTokenPromise;
+                    return admin.database().ref("/users").child(webUID).child("token").set(customToken);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                console.log("User not found for the scanned UID");
+                return null;
+            })
     } else {
         console.log("Auth error");
         return null;
