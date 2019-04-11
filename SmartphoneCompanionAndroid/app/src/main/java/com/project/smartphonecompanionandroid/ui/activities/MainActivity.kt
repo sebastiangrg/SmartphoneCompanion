@@ -1,9 +1,13 @@
-package com.project.smartphonecompanionandroid.ui
+package com.project.smartphonecompanionandroid.ui.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.google.firebase.auth.FirebaseAuth
 import com.project.smartphonecompanionandroid.R
+import com.project.smartphonecompanionandroid.ui.fragments.ActiveSessionsFragment
+import com.project.smartphonecompanionandroid.ui.fragments.PhoneNumberFragment
+import com.project.smartphonecompanionandroid.ui.fragments.QRCodeScannerFragment
+import com.project.smartphonecompanionandroid.ui.fragments.VerificationCodeFragment
 import com.project.smartphonecompanionandroid.utils.replaceWith
 
 class MainActivity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package com.project.smartphonecompanionandroid.ui
+package com.project.smartphonecompanionandroid.ui.fragments
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -14,13 +14,10 @@ import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.functions.FirebaseFunctionsException
 import com.project.smartphonecompanionandroid.utils.goBack

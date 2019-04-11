@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.project.smartphonecompanionandroid.R
-import com.project.smartphonecompanionandroid.ui.MainActivity
+import com.project.smartphonecompanionandroid.ui.activities.MainActivity
 
 fun FragmentActivity.replaceWith(fragment: Fragment) {
     val containerId = when (this) {

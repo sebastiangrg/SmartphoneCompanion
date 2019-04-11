@@ -1,4 +1,4 @@
-package com.project.smartphonecompanionandroid.ui
+package com.project.smartphonecompanionandroid.ui.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
