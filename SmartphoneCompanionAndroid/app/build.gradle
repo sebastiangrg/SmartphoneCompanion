@@ -30,6 +30,9 @@ dependencies {
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
+    // PHONE NUMBER
+    implementation 'com.hbb20:ccp:2.2.4'
+
     // CAMERA
     implementation 'com.mindorks:paracamera:0.2.2'
 
