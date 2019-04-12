@@ -1,11 +1,11 @@
 package com.project.smartphonecompanionandroid.ui.fragments
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.fragment.app.Fragment
 
 import com.google.android.gms.tasks.TaskExecutors
 import com.google.firebase.FirebaseApiNotAvailableException

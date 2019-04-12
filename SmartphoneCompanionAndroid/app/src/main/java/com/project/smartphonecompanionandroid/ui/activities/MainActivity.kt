@@ -1,7 +1,7 @@
 package com.project.smartphonecompanionandroid.ui.activities
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.project.smartphonecompanionandroid.R
 import com.project.smartphonecompanionandroid.ui.fragments.ActiveSessionsFragment

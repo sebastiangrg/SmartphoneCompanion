@@ -1,16 +1,16 @@
 package com.project.smartphonecompanionandroid.ui.fragments
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import com.google.android.material.button.MaterialButton
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.hbb20.CountryCodePicker
 import com.project.smartphonecompanionandroid.R
 import com.project.smartphonecompanionandroid.utils.replaceWith
 
 import kotlinx.android.synthetic.main.fragment_phone_number.*
-import kotlinx.android.synthetic.main.fragment_verification_code.*
 
 
 class PhoneNumberFragment : Fragment() {
@@ -23,7 +23,7 @@ class PhoneNumberFragment : Fragment() {
 
         nextButton.setOnClickListener { submitPhoneNumber() }
 
-        countryCodePicker.registerCarrierNumberEditText(carrierNumberEditText)
+        countryCodePicker.registerCarrierNumberEditText(phoneNumberEditText)
         countryCodePicker.setDefaultCountryUsingNameCode("RO")
 
         countryCodePicker.setPhoneNumberValidityChangeListener(CountryCodePicker.PhoneNumberValidityChangeListener {

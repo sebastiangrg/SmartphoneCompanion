@@ -1,8 +1,8 @@
 package com.project.smartphonecompanionandroid.ui.fragments
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.*
+import androidx.fragment.app.Fragment
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -32,13 +32,13 @@ class ActiveSessionsFragment : Fragment() {
         addButton.setOnClickListener { addSession() }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.menu_active_sessions, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_active_sessions, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.signOutMenuItem -> {
                 signOut()
                 true
