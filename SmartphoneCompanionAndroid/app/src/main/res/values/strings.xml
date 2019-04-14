@@ -14,4 +14,6 @@
         code and phone number below:
     </string>
     <string name="intro_2">Tap \"Next\" when you\'re ready.</string>
+    <string name="number_confirmation_title">Confirm phone number</string>
+    <string name="number_confirmation_message">We will send an SMS to the number &lt;b>%1$s&lt;/b>. Is this OK?</string>
 </resources>

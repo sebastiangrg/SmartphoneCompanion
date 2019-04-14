@@ -10,4 +10,13 @@
     <style name="FilledBox" parent="ShapeAppearanceOverlay.MaterialComponents.TextInputLayout.FilledBox">
         <item name="android:textColorHint">@color/primaryDarkColor</item>
     </style>
+
+    <style name="Dialog" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="buttonBarPositiveButtonStyle">@style/DialogButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/DialogButton</item>
+    </style>
+
+    <style name="DialogButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/primaryColor</item>
+    </style>
 </resources>
