@@ -8,4 +8,10 @@
     <string name="sign_out">Sign Out</string>
     <string name="no_available_phone_number">No available phone number</string>
     <string name="app_logo">App Logo</string>
+    <string name="welcome">Welcome to Smartphone Companion</string>
+    <string name="verify_phone_number">Verify your phone number</string>
+    <string name="intro_1">In order to verify your phone number, we will send you an SMS message. Fill in your country
+        code and phone number below:
+    </string>
+    <string name="intro_2">Tap \"Next\" when you\'re ready.</string>
 </resources>

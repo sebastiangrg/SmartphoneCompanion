@@ -1,5 +1,6 @@
 package com.project.smartphonecompanionandroid.ui.fragments
 
+import android.opengl.Visibility
 import android.os.Bundle
 import com.google.android.material.button.MaterialButton
 import android.view.LayoutInflater
@@ -28,6 +29,7 @@ class PhoneNumberFragment : Fragment() {
 
         countryCodePicker.setPhoneNumberValidityChangeListener(CountryCodePicker.PhoneNumberValidityChangeListener {
             nextButton.isEnabled = it
+            intro2TextView.visibility = if (it) View.VISIBLE else View.GONE
         })
     }
 

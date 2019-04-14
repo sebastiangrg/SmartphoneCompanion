@@ -7,4 +7,7 @@
         <item name="colorOnPrimary">@color/primaryTextColor</item>
     </style>
 
+    <style name="FilledBox" parent="ShapeAppearanceOverlay.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="android:textColorHint">@color/primaryDarkColor</item>
+    </style>
 </resources>

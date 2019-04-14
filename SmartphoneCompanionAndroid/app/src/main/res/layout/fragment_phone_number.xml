@@ -8,15 +8,35 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp">
 
+    <TextView
+            android:id="@+id/welcomeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="48dp"
+            android:text="@string/welcome"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textColor="@color/primaryColor"/>
+
+    <TextView
+            android:id="@+id/intro1TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            app:layout_constraintTop_toBottomOf="@+id/welcomeTextView"
+            android:text="@string/intro_1"
+            android:textColor="@color/primaryColor"
+            android:textSize="15sp"/>
 
     <com.hbb20.CountryCodePicker
             android:id="@+id/countryCodePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/phoneNumberTextInputLayout"
-            android:layout_marginBottom="24dp"
+            app:layout_constraintTop_toBottomOf="@+id/intro1TextView"
+            android:layout_marginTop="48dp"
             app:ccpDialog_backgroundColor="@color/secondaryLightColor"
-            app:ccpDialog_textColor="@color/primaryTextColor"
+            app:ccpDialog_textColor="@color/secondaryTextColor"
             android:padding="12dp"
             app:ccp_contentColor="@color/primaryColor"
             android:background="@color/secondaryLightColor"
@@ -29,9 +49,9 @@
             android:id="@+id/phoneNumberTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/nextButton"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            app:layout_constraintTop_toBottomOf="@+id/countryCodePicker"
+            android:layout_marginTop="24dp"
+            style="@style/FilledBox"
             app:hintEnabled="true"
             android:hint="@string/phone_number"
             app:boxBackgroundColor="@color/secondaryLightColor">
@@ -46,14 +66,27 @@
                 android:singleLine="true"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.button.MaterialButton
-            android:id="@+id/nextButton"
-            android:layout_width="wrap_content"
+    <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_marginBottom="24dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:backgroundTint="@color/primaryColor"
-            android:text="@string/next"/>
+            android:gravity="center_horizontal"
+            app:layout_constraintBottom_toBottomOf="parent">
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/nextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/primaryColor"
+                android:text="@string/next"/>
+
+        <TextView
+                android:id="@+id/intro2TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/intro_2"
+                android:textColor="@color/primaryColor"
+                android:visibility="gone"/>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
