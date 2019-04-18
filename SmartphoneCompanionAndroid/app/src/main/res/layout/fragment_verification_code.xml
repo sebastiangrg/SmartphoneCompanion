@@ -5,24 +5,87 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.fragments.VerificationCodeFragment">
+        tools:context=".ui.fragments.VerificationCodeFragment"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp">
 
-    <EditText android:id="@+id/verificationCodeEditText"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              app:layout_constraintTop_toTopOf="parent"
-              app:layout_constraintBottom_toBottomOf="@id/submitButton"
-              android:layout_marginBottom="64dp"
-              android:hint="@string/sms_code"
-              android:inputType="textVisiblePassword" android:singleLine="true" android:textSize="24sp"
-              android:textStyle="bold" android:textAlignment="center" tools:layout_editor_absoluteX="0dp"
-              app:layout_constraintVertical_bias="0.495"
-              android:imeOptions="actionDone"/>
-
-    <Button android:id="@+id/submitButton"
+    <TextView
+            android:id="@+id/verifyingNumberTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@string/submit"/>
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="48dp"
+            android:text="@string/verifying_your_phone_number"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textColor="@color/primaryColor"/>
+
+    <TextView
+            android:id="@+id/intro3TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            app:layout_constraintTop_toBottomOf="@+id/verifyingNumberTextView"
+            android:text="@string/intro_3"
+            android:textColor="@color/primaryColor"
+            android:textSize="15sp"/>
+
+    <TextView
+            android:id="@+id/wrongNumberTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/intro3TextView"
+            android:text="@string/wrong_number"
+            android:textColor="@color/primaryColor"
+            android:textStyle="bold"
+            android:textSize="15sp"/>
+
+    <com.chaos.view.PinView
+            android:id="@+id/verificationCodePinView"
+            style="@style/PinWidget.PinView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/wrongNumberTextView"
+            android:layout_marginTop="64dp"
+            android:inputType="phone"
+            app:cursorColor="@color/primaryColor"
+            android:textStyle="bold"
+            android:textColor="@color/primaryColor"
+            android:textSize="20sp"
+            android:hint="@string/dashes"
+            android:cursorVisible="false"
+            app:itemCount="6"
+            app:itemHeight="32dp"
+            app:itemSpacing="16dp"
+            app:itemWidth="32dp"
+            app:lineWidth="2dp"
+            app:viewType="line"/>
+
+    <TextView
+            android:id="@+id/intro4TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/verificationCodePinView"
+            android:layout_marginTop="16dp"
+            android:text="@string/enter_the_6_digit_code"
+            android:textAlignment="center"
+            android:textColor="@color/primaryColor"/>
+
+
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/resendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/intro4TextView"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="64dp"
+            android:backgroundTint="@color/primaryColor"
+            android:text="@string/resend_sms"
+            android:enabled="false"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

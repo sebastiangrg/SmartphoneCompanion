@@ -1,13 +1,12 @@
 <resources>
     <string name="app_name">Smartphone Companion</string>
+    <string name="app_logo">App Logo</string>
     <string name="phone_number">Phone Number</string>
     <string name="next">Next</string>
-    <string name="sms_code">SMS Code</string>
     <string name="submit">Submit</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="sign_out">Sign Out</string>
-    <string name="no_available_phone_number">No available phone number</string>
-    <string name="app_logo">App Logo</string>
+
+    <!--Phone Number-->
     <string name="welcome">Welcome to Smartphone Companion</string>
     <string name="verify_phone_number">Verify your phone number</string>
     <string name="intro_1">In order to verify your phone number, we will send you an SMS message. Fill in your country
@@ -16,4 +15,20 @@
     <string name="intro_2">Tap \"Next\" when you\'re ready.</string>
     <string name="number_confirmation_title">Confirm phone number</string>
     <string name="number_confirmation_message">We will send an SMS to the number &lt;b>%1$s&lt;/b>. Is this OK?</string>
+
+    <!--Verification code-->
+    <string name="verifying_your_phone_number">Verifying your phone number</string>
+    <string name="intro_3">We are automatically detecting an SMS sent to your number.</string>
+    <string name="intro_3_placeholder">We are automatically detecting an SMS sent to &lt;b>%1$s&lt;/b>.</string>
+    <string name="verifying">Verifying %1$s</string>
+    <string name="wrong_number">
+        <u>Wrong number?</u>
+    </string>
+    <string name="dashes">------</string>
+    <string name="enter_the_6_digit_code">Enter the 6-digit code</string>
+    <string name="resend_sms">Resend SMS</string>
+    <string name="resend_sms_placeholder">Resend SMS %1$s</string>
+
+    <!--Active Sessions-->
+    <string name="no_available_phone_number">No available phone number</string>
 </resources>
