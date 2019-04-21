@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/verificationCodePinView"
             android:layout_marginTop="16dp"
-            android:text="@string/enter_the_6_digit_code"
+            android:text="@string/intro_4"
             android:textAlignment="center"
             android:textColor="@color/primaryColor"/>
 

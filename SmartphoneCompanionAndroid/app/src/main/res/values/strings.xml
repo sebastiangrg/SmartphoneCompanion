@@ -25,10 +25,13 @@
         <u>Wrong number?</u>
     </string>
     <string name="dashes">------</string>
-    <string name="enter_the_6_digit_code">Enter the 6-digit code</string>
+    <string name="intro_4">Enter the 6-digit code</string>
     <string name="resend_sms">Resend SMS</string>
     <string name="resend_sms_placeholder">Resend SMS %1$s</string>
 
     <!--Active Sessions-->
-    <string name="no_available_phone_number">No available phone number</string>
+    <string name="intro_5_placeholder">You are signed in as &lt;b>%1$s&lt;/b></string>
+    <string name="intro_6">Visit <u>smartphone-companion.firebaseapp.com</u> on your
+        computer in order to pair your device and use the app.
+    </string>
 </resources>

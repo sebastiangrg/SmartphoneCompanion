@@ -12,7 +12,7 @@
             android:id="@+id/imageView"
             android:layout_width="250dp"
             android:layout_height="200dp"
-            app:srcCompat="@drawable/logo"
+            android:src="@drawable/logo"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"

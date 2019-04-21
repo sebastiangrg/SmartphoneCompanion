@@ -2,6 +2,7 @@ package com.project.smartphonecompanionandroid.ui.fragments
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 
 import com.google.firebase.auth.FirebaseAuth
@@ -26,7 +27,10 @@ class ActiveSessionsFragment : Fragment() {
         user = FirebaseAuth.getInstance().currentUser
 
         user?.phoneNumber?.let {
-            userTextView.text = it
+            intro5TextView.text = HtmlCompat.fromHtml(
+                getString(R.string.intro_5_placeholder, it),
+                HtmlCompat.FROM_HTML_MODE_LEGACY
+            )
         }
 
         addButton.setOnClickListener { addSession() }
