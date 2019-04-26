@@ -1,0 +1,9 @@
+<div class="main-container">
+  <ng-container *ngIf="user$ | async as user; else loading">
+    <h1>Anonymous user</h1>
+    <ngx-qrcode [qrc-value]="user.uid" qrc-class="qr-code" [qrc-element-type]="'img'"></ngx-qrcode>
+  </ng-container>
+  <ng-template #loading>
+    <h1>Loading</h1>
+  </ng-template>
+</div>

@@ -1,0 +1,9 @@
+<div class="main-container">
+  <ng-container *ngIf="data$ | async; else loading">
+    <h1>User {{ user.phoneNumber }}</h1>
+    <button (click)="signOut()">Sign Out</button>
+  </ng-container>
+  <ng-template #loading>
+    <h1>Loading</h1>
+  </ng-template>
+</div>

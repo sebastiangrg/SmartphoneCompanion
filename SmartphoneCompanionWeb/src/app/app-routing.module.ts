@@ -1,14 +1,21 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './login/login.component';
+import { MainContainerComponent } from './main-container/main-container.component';
+import { AuthGuard } from './services/auth.guard';
+import { AnonGuard } from './services/anon.guard';
+import { SignInComponent } from './sign-in/sign-in.component';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
   {
     path: '',
-    redirectTo: '/login',
-    pathMatch: 'full'
+    component: MainContainerComponent,
+    canActivate: [AuthGuard]
   },
+  {
+    path: 'signIn',
+    component: SignInComponent,
+    canActivate: [AnonGuard]
+  }
 ];
 
 @NgModule({

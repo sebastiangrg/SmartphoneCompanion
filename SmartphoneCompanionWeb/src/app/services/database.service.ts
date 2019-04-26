@@ -8,7 +8,10 @@ export class DatabaseService {
 
   constructor(private afDatabase: AngularFireDatabase) { }
 
-  public getUserTokenReferece(uid: string): firebase.database.Reference {
-    return this.afDatabase.database.ref('users').child(uid).child('token');
+  public saveWebToken(uid: string, token: string): Promise<any> {
+    return this.afDatabase.database.ref('users')
+      .child(uid)
+      .child('webToken')
+      .set(token);
   }
 }

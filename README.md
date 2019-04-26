@@ -2,7 +2,7 @@
 Smartphone Companion allows you to access SMS messages, files and contacts from anywhere.
 
 In order to pair your mobile device to a web session, you need to:
-1. Login via phone number on the mobie device. To identify that you're the owner of the provided phone number, the app sends you a text via SMS containing a code. 
+1. Sign in via phone number on the mobie device. To identify that you're the owner of the provided phone number, the app sends you a text via SMS containing a code. 
 2. Scan the QR code from your screen using the mobile app.
 
 ## Running the app

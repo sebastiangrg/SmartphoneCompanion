@@ -13,6 +13,10 @@ function createCustomToken(auth: any) {
     return admin.auth().createCustomToken(uid);
 }
 
+function getWebToken(uid: string) {
+    return admin.database().ref("/users").child(uid).child("webToken").once('value');
+}
+
 export const pairWithUID = functions.https.onCall(async (data, context) => {
     if (context.auth) {
         const webUID = data.webUID
@@ -23,8 +27,11 @@ export const pairWithUID = functions.https.onCall(async (data, context) => {
                 const customTokenPromise = createCustomToken(context.auth)
                 if (customTokenPromise) {
                     const customToken = await customTokenPromise;
-                    return admin.database().ref("/users").child(webUID).child("token").set(customToken);
+                    const webToken = await getWebToken(webUID);
+
+                    return admin.messaging().sendToDevice(webToken.val(), { data: { customToken: customToken } })
                 }
+                return null;
             })
             .catch(err => {
                 console.log(err);
