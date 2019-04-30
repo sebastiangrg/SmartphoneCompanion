@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.hbb20.CountryCodePicker
-import com.project.smartphonecompanionandroid.utils.replaceWith
 
 import kotlinx.android.synthetic.main.fragment_phone_number.*
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.text.HtmlCompat
 import com.project.smartphonecompanionandroid.R
+import com.project.smartphonecompanionandroid.utils.replaceFragment
 
 
 class PhoneNumberFragment : Fragment() {
@@ -64,7 +64,7 @@ class PhoneNumberFragment : Fragment() {
                 arguments = bundle
             }
 
-            requireActivity().replaceWith(fragment)
+            requireActivity().replaceFragment(fragment)
         }
     }
 }

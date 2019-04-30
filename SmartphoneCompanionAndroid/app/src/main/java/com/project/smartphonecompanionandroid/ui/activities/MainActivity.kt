@@ -6,9 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.project.smartphonecompanionandroid.R
 import com.project.smartphonecompanionandroid.ui.fragments.ActiveSessionsFragment
 import com.project.smartphonecompanionandroid.ui.fragments.PhoneNumberFragment
-import com.project.smartphonecompanionandroid.ui.fragments.QRCodeScannerFragment
-import com.project.smartphonecompanionandroid.ui.fragments.VerificationCodeFragment
-import com.project.smartphonecompanionandroid.utils.replaceWith
+import com.project.smartphonecompanionandroid.utils.replaceFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,19 +17,10 @@ class MainActivity : AppCompatActivity() {
 
         if (mAuth.currentUser == null) {
             val phoneNumberFragment = PhoneNumberFragment()
-            this.replaceWith(phoneNumberFragment)
+            this.replaceFragment(phoneNumberFragment, clearBackStack = true)
         } else {
             val activeSessionsFragment = ActiveSessionsFragment()
-            this.replaceWith(activeSessionsFragment)
-        }
-    }
-
-    override fun onBackPressed() {
-        val fragment = supportFragmentManager.findFragmentById(R.id.main_container)
-        if (fragment is VerificationCodeFragment || fragment is QRCodeScannerFragment) {
-            super.onBackPressed()
-        } else {
-            finish()
+            this.replaceFragment(activeSessionsFragment, clearBackStack = true)
         }
     }
 }

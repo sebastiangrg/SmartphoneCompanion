@@ -20,7 +20,6 @@ import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.functions.FirebaseFunctionsException
-import com.project.smartphonecompanionandroid.utils.goBack
 import com.project.smartphonecompanionandroid.utils.snackbar
 import kotlinx.android.synthetic.main.fragment_qrcode_scanner.*
 import java.io.IOException
@@ -115,13 +114,11 @@ class QRCodeScannerFragment : Fragment() {
         val handler = Handler(Looper.getMainLooper())
         handler.post {
             cameraSource.stop()
-            val activity = requireActivity()
-            activity.goBack()
+            requireActivity().onBackPressed()
         }
     }
 
     private fun isValidUID(value: String): Boolean {
-        // TODO find more validation criteria
         return value.length in 27..30
     }
 

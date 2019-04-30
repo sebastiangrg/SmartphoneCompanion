@@ -19,7 +19,7 @@ import com.google.firebase.auth.PhoneAuthProvider
 import com.project.smartphonecompanionandroid.R
 import com.project.smartphonecompanionandroid.utils.afterTextChanged
 import com.project.smartphonecompanionandroid.utils.clearFocusAndCloseKeyboard
-import com.project.smartphonecompanionandroid.utils.replaceWith
+import com.project.smartphonecompanionandroid.utils.replaceFragment
 import com.project.smartphonecompanionandroid.utils.snackbar
 import kotlinx.android.synthetic.main.fragment_verification_code.*
 import java.util.concurrent.TimeUnit
@@ -47,6 +47,7 @@ class VerificationCodeFragment : Fragment() {
         this.phoneNumber = arguments?.get("phoneNumber") as String
 
         this.verifyingNumberTextView.text = getString(R.string.verifying, this.phoneNumber)
+
         this.intro3TextView.text = HtmlCompat.fromHtml(
             getString(
                 R.string.intro_3_placeholder,
@@ -104,6 +105,9 @@ class VerificationCodeFragment : Fragment() {
                         snackbar("Check your connection and try again.")
                 }
 
+                if (isVisible)
+                    verificationCodePinView.isEnabled = true
+
                 resendButton.isEnabled = true
             }
 
@@ -121,12 +125,18 @@ class VerificationCodeFragment : Fragment() {
                 forceResendToken = forceResendingToken
                 verificationId = id
 
+                if (isVisible)
+                    verificationCodePinView.isEnabled = true
+
                 startResendTimer()
             }
         }
     }
 
     private fun sendVerificationCode(phoneNumber: String) {
+        if (isVisible)
+            verificationCodePinView.isEnabled = false
+
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
             phoneNumber,
             60,
@@ -179,11 +189,11 @@ class VerificationCodeFragment : Fragment() {
 
     private fun goToActiveSessions() {
         val fragment = ActiveSessionsFragment()
-        requireActivity().replaceWith(fragment)
+        requireActivity().replaceFragment(fragment, clearBackStack = true)
     }
 
     private fun goToPhoneNumber() {
         val fragment = PhoneNumberFragment()
-        requireActivity().replaceWith(fragment)
+        requireActivity().replaceFragment(fragment)
     }
 }

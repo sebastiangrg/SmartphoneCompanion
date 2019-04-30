@@ -1,13 +1,12 @@
 package com.project.smartphonecompanionandroid.ui.activities
 
+import android.app.Activity
 import android.os.Bundle
 import android.content.Intent
 import android.view.WindowManager
 import android.os.Handler
-import androidx.appcompat.app.AppCompatActivity
 
-
-class SplashScreenActivity : AppCompatActivity() {
+class SplashScreenActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(

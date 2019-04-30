@@ -8,8 +8,7 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.project.smartphonecompanionandroid.R
-import com.project.smartphonecompanionandroid.utils.clearBackStack
-import com.project.smartphonecompanionandroid.utils.replaceWith
+import com.project.smartphonecompanionandroid.utils.replaceFragment
 import kotlinx.android.synthetic.main.fragment_active_sessions.*
 
 
@@ -53,7 +52,7 @@ class ActiveSessionsFragment : Fragment() {
 
     private fun addSession() {
         val fragment = QRCodeScannerFragment()
-        requireActivity().replaceWith(fragment)
+        requireActivity().replaceFragment(fragment)
     }
 
     private fun signOut() {
@@ -62,10 +61,7 @@ class ActiveSessionsFragment : Fragment() {
     }
 
     private fun goToSignInFlow() {
-        if (requireActivity().supportFragmentManager.fragments.find { f -> f is PhoneNumberFragment } != null) {
-            requireActivity().clearBackStack()
-        }
         val fragment = PhoneNumberFragment()
-        requireActivity().replaceWith(fragment)
+        requireActivity().replaceFragment(fragment, clearBackStack = true)
     }
 }
