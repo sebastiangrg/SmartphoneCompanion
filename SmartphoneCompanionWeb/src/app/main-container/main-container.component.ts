@@ -5,7 +5,8 @@ import { AuthService } from '../services/auth.service';
 import { DatabaseService } from '../services/database.service';
 import { FCMService } from '../services/fcm.service';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs/operators';
+import { tap, take } from 'rxjs/operators';
+import { SyncService } from '../services/sync.service';
 
 @Component({
   selector: 'app-main-container',
@@ -19,6 +20,7 @@ export class MainContainerComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private fcmService: FCMService,
+    private syncService: SyncService,
     private router: Router
   ) { }
 
@@ -38,6 +40,17 @@ export class MainContainerComponent implements OnInit {
             this.fcmService.saveWebToken(user.uid);
           }
         }));
+  }
+
+  syncConversations() {
+    this.syncService.syncConversations()
+      .pipe(
+        take(1)
+      )
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+        });
   }
 
   signOut() {

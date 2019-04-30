@@ -4,6 +4,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { AngularFireFunctionsModule } from '@angular/fire/functions';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
 
 import { environment } from '../environments/environment';
@@ -25,6 +26,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
     AngularFireMessagingModule,
     AngularFireAuthModule,
     AngularFireDatabaseModule,
+    AngularFireFunctionsModule,
     NgxQRCodeModule
   ],
   providers: [],
