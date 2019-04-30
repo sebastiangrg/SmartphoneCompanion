@@ -1,11 +1,13 @@
-// only on firebase hosting
-importScripts('/__/firebase/5.5.6/firebase-app.js');
-importScripts('/__/firebase/5.5.6/firebase-messaging.js');
-importScripts('/__/firebase/init.js');
+importScripts('https://www.gstatic.com/firebasejs/5.10.1/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/5.10.1/firebase-messaging.js');
 
-var messaging = firebase.messaging();
+firebase.initializeApp({
+  'messagingSenderId': '329891444276'
+});
 
-// function that receives the messages
+const messaging = firebase.messaging();
+
+
 messaging.setBackgroundMessageHandler(function (payload) {
   console.log('Received background message ', payload);
 
