@@ -4,7 +4,7 @@ import * as admin from 'firebase-admin';
 
 admin.initializeApp();
 
-function createCustomToken(auth: any) {
+function createCustomToken(auth: any): Promise<string> | null {
     if (!auth) return null;
 
     const uid = auth.uid;
@@ -13,12 +13,29 @@ function createCustomToken(auth: any) {
     return admin.auth().createCustomToken(uid);
 }
 
-function getWebToken(uid: string) {
+function getWebToken(uid: string): Promise<any> {
     return admin.database().ref("/users").child(uid).child("webToken").once('value');
 }
 
-function getMobileToken(uid: string) {
+function getMobileToken(uid: string): Promise<any> {
     return admin.database().ref("/users").child(uid).child("mobileToken").once('value');
+}
+
+async function sendSyncMessage(auth: any, sync: string): Promise<any> {
+    if (auth) {
+        const uid = auth.uid;
+        const mobileToken = await getMobileToken(uid);
+
+        if (mobileToken.exists()) {
+            return admin.messaging().sendToDevice(mobileToken.val(), { data: { sync: sync } });
+        } else {
+            console.log("Mobile token error");
+            return null;
+        }
+    } else {
+        console.log("Auth error");
+        return null;
+    }
 }
 
 export const pairWithUID = functions.https.onCall(async (data, context) => {
@@ -49,20 +66,23 @@ export const pairWithUID = functions.https.onCall(async (data, context) => {
 });
 
 export const syncConversations = functions.https.onCall(async (data, context) => {
-    if (context.auth) {
-        const uid = context.auth.uid;
-        const mobileToken = await getMobileToken(uid);
+    return sendSyncMessage(context.auth, "conversations");
+});
 
-        const sync = "conversations";
+export const syncSent = functions.https.onCall(async (data, context) => {
+    return sendSyncMessage(context.auth, "sent");
+});
 
-        if (mobileToken.exists()) {
-            return admin.messaging().sendToDevice(mobileToken.val(), { data: { sync: sync } });
-        } else {
-            console.log("Mobile token error");
-            return null;
-        }
-    } else {
-        console.log("Auth error");
-        return null;
-    }
+
+export const syncReceived = functions.https.onCall(async (data, context) => {
+    return sendSyncMessage(context.auth, "received");
+});
+
+
+export const syncContacts = functions.https.onCall(async (data, context) => {
+    return sendSyncMessage(context.auth, "contacts");
+});
+
+export const syncSentAndReceived = functions.https.onCall(async (data, context) => {
+    return sendSyncMessage(context.auth, "sent|received");
 });

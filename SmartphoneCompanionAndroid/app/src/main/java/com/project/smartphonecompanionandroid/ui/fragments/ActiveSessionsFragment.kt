@@ -1,7 +1,12 @@
 package com.project.smartphonecompanionandroid.ui.fragments
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 
@@ -9,10 +14,15 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.project.smartphonecompanionandroid.R
 import com.project.smartphonecompanionandroid.utils.replaceFragment
+import com.project.smartphonecompanionandroid.utils.snackbar
 import kotlinx.android.synthetic.main.fragment_active_sessions.*
 
 
 class ActiveSessionsFragment : Fragment() {
+    companion object {
+        private const val READ_SMS_PERMISSION_REQUEST_CODE = 2
+    }
+
     private var user: FirebaseUser? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -33,6 +43,18 @@ class ActiveSessionsFragment : Fragment() {
         }
 
         addButton.setOnClickListener { addSession() }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.CAMERA
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPermissions(Array(READ_SMS_PERMISSION_REQUEST_CODE) { Manifest.permission.READ_SMS }, 1)
+            } else {
+                Log.d("ActiveSessions", "Permission granted")
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -63,5 +85,18 @@ class ActiveSessionsFragment : Fragment() {
     private fun goToSignInFlow() {
         val fragment = PhoneNumberFragment()
         requireActivity().replaceFragment(fragment, clearBackStack = true)
+    }
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            READ_SMS_PERMISSION_REQUEST_CODE ->
+                // if the request is cancelled, the result arrays are empty
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    snackbar("Permission granted")
+                } else {
+                    snackbar("You declined to allow the app to access your camera")
+                }
+        }
     }
 }

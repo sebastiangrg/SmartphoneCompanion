@@ -19,9 +19,6 @@ object FCMUtils {
                     .child(uid)
                     .child("mobileToken")
                     .setValue(token)
-                    .addOnCanceledListener { Log.d("FCMUtils", "Canceled") }
-                    .addOnSuccessListener { Log.d("FCMUtils", "Success") }
-                    .addOnFailureListener { Log.d("FCMUtils", it.message) }
             }
         }
 
