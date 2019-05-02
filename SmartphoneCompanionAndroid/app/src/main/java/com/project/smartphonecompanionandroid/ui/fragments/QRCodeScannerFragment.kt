@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
@@ -22,10 +21,17 @@ import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.functions.FirebaseFunctionsException
 import com.project.smartphonecompanionandroid.utils.snackbar
 import kotlinx.android.synthetic.main.fragment_qrcode_scanner.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
+import org.jetbrains.anko.warn
 import java.io.IOException
 
 
-class QRCodeScannerFragment : Fragment() {
+class QRCodeScannerFragment : Fragment(), AnkoLogger {
+    companion object {
+        private const val CAMERA_PERMISSION_REQUEST_CODE = 1
+    }
+
     private lateinit var cameraSource: CameraSource
     private lateinit var barcodeDetector: BarcodeDetector
 
@@ -39,6 +45,8 @@ class QRCodeScannerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        info("Starting QRCodeScannerFragment")
 
         toolbar.setNavigationOnClickListener {
             requireActivity().onBackPressed()
@@ -99,7 +107,7 @@ class QRCodeScannerFragment : Fragment() {
                 val barcodes = detections.detectedItems
                 if (barcodes.size() != 0) {
                     val decoded = barcodes.valueAt(0).displayValue
-                    Log.d(TAG, decoded)
+                    info("Decoded QR: $decoded")
 
                     if (isValidUID(decoded)) {
                         stopScanning()
@@ -134,13 +142,14 @@ class QRCodeScannerFragment : Fragment() {
             .addOnCompleteListener { task ->
                 if (!task.isSuccessful) {
                     val e = task.exception
+                    warn("Pair with UID failed")
                     if (e is FirebaseFunctionsException) {
                         val code = e.code
                         val details = e.details
-                        Log.d(TAG, "Error code - $code - $details")
+                        warn("Error code - $code - $details")
                     }
                 } else {
-                    Log.d(TAG, "Function completed successfully")
+                    info("Pair with UID completed successfully")
                 }
             }
     }
@@ -161,10 +170,5 @@ class QRCodeScannerFragment : Fragment() {
         super.onDestroy()
         barcodeDetector.release()
         cameraSource.release()
-    }
-
-    companion object {
-        private const val CAMERA_PERMISSION_REQUEST_CODE = 1
-        private const val TAG = "QRCodeScannerFragment"
     }
 }

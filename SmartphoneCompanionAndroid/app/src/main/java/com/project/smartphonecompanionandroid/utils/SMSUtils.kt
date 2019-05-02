@@ -1,12 +1,13 @@
 package com.project.smartphonecompanionandroid.utils
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.database.Cursor
 import android.provider.Telephony
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
+import org.jetbrains.anko.warn
 import java.sql.Timestamp
 
 data class SMSMessage(
@@ -17,17 +18,15 @@ data class SMSMessage(
     val isSender: Boolean
 )
 
-object SMSUtils {
-    private const val TAG = "SMSUtils"
-
-    @SuppressLint("UseSparseArrays")
+object SMSUtils : AnkoLogger {
     fun syncLastMessages(context: Context) {
-        Log.d(TAG, "Synchronizing last messages")
+        info("Synchronizing last messages")
 
         val lastMessages = getLastMessages(context)
         val lastMessagesMap = HashMap<String, SMSMessage>()
+
         lastMessages.forEach {
-            Log.d(TAG, it.toString())
+            info("Message: $it")
             lastMessagesMap[it.thread.toString()] = it
         }
 
@@ -35,19 +34,20 @@ object SMSUtils {
         val uid = FirebaseAuth.getInstance().uid
 
         if (uid != null) {
-            Log.d(TAG, uid)
+            info("Firebase UID: $uid")
             firebaseDatabase.reference
                 .child("users")
                 .child(uid)
                 .child("lastMessages")
                 .updateChildren(lastMessagesMap as Map<String, Any>)
+                .addOnFailureListener { warn("Synchronizing last messages to Firebase failed") }
+                .addOnCanceledListener { warn("Synchronizing last messages to Firebase canceled") }
+                .addOnCompleteListener { info("Done synchronizing last messages") }
         }
-
-        Log.d(TAG, "Done synchronizing last messages")
     }
 
     fun syncConversation(context: Context, thread: Long) {
-        Log.d(TAG, "Synchronizing conversation $thread")
+        info("Synchronizing conversation $thread")
 
         val received = getReceivedForThread(context, thread)
         val sent = getSentForThread(context, thread)
@@ -56,7 +56,7 @@ object SMSUtils {
         val messagesMap = HashMap<String, SMSMessage>()
 
         messages.forEach {
-            Log.d(TAG, it.toString())
+            info("Message: $it")
             messagesMap[it.hashCode().toString()] = it
         }
 
@@ -64,16 +64,17 @@ object SMSUtils {
         val uid = FirebaseAuth.getInstance().uid
 
         if (uid != null) {
-            Log.d(TAG, uid)
+            info("Firebase UID: $uid")
             firebaseDatabase.reference
                 .child("users")
                 .child(uid)
                 .child("messages")
                 .child(thread.toString())
                 .updateChildren(messagesMap as Map<String, Any>)
+                .addOnFailureListener { warn("Synchronizing conversation $thread to Firebase failed") }
+                .addOnCanceledListener { warn("Synchronizing conversation $thread to Firebase canceled") }
+                .addOnCompleteListener { info("Done synchronizing conversation $thread") }
         }
-
-        Log.d(TAG, "Done synchronizing conversation $thread")
     }
 
     private fun getLastMessages(context: Context): List<SMSMessage> {

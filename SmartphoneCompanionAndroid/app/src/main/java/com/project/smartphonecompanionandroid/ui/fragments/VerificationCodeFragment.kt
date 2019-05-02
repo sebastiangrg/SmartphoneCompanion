@@ -22,18 +22,59 @@ import com.project.smartphonecompanionandroid.utils.clearFocusAndCloseKeyboard
 import com.project.smartphonecompanionandroid.utils.replaceFragment
 import com.project.smartphonecompanionandroid.utils.snackbar
 import kotlinx.android.synthetic.main.fragment_verification_code.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import java.util.concurrent.TimeUnit
 
 
-class VerificationCodeFragment : Fragment() {
+class VerificationCodeFragment : Fragment(), AnkoLogger {
     companion object {
-        const val RESEND_SMS_INTERVAL = 60000L
+        private const val RESEND_SMS_INTERVAL = 60000L
     }
 
     private lateinit var phoneNumber: String
     private lateinit var verificationId: String
-    private lateinit var verificationCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     private var forceResendToken: PhoneAuthProvider.ForceResendingToken? = null
+
+    private val verificationCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+        override fun onVerificationFailed(exception: FirebaseException?) {
+            when (exception) {
+                is FirebaseAuthInvalidCredentialsException ->
+                    snackbar("Invalid phone number.")
+                is FirebaseApiNotAvailableException ->
+                    snackbar("Please install Google Play Services")
+                is FirebaseTooManyRequestsException ->
+                    snackbar("Too many requests. Try again later.")
+                else ->
+                    snackbar("Check your connection and try again.")
+            }
+
+            if (isVisible)
+                verificationCodePinView.isEnabled = true
+
+            resendButton.isEnabled = true
+        }
+
+        override fun onVerificationCompleted(credential: PhoneAuthCredential?) {
+            val code = credential?.smsCode
+
+            code?.let {
+                if (isVisible)
+                    verificationCodePinView.setText(it)
+            }
+        }
+
+        override fun onCodeSent(id: String, forceResendingToken: PhoneAuthProvider.ForceResendingToken) {
+            super.onCodeSent(id, forceResendingToken)
+            forceResendToken = forceResendingToken
+            verificationId = id
+
+            if (isVisible)
+                verificationCodePinView.isEnabled = true
+
+            startResendTimer()
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_verification_code, container, false)
@@ -42,7 +83,7 @@ class VerificationCodeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initVerificationCallbacks()
+        info("Starting VerificationCodeFragment")
 
         this.phoneNumber = arguments?.get("phoneNumber") as String
 
@@ -89,48 +130,6 @@ class VerificationCodeFragment : Fragment() {
             }
 
         }.start()
-    }
-
-    private fun initVerificationCallbacks() {
-        verificationCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-            override fun onVerificationFailed(exception: FirebaseException?) {
-                when (exception) {
-                    is FirebaseAuthInvalidCredentialsException ->
-                        snackbar("Invalid phone number.")
-                    is FirebaseApiNotAvailableException ->
-                        snackbar("Please install Google Play Services")
-                    is FirebaseTooManyRequestsException ->
-                        snackbar("Too many requests. Try again later.")
-                    else ->
-                        snackbar("Check your connection and try again.")
-                }
-
-                if (isVisible)
-                    verificationCodePinView.isEnabled = true
-
-                resendButton.isEnabled = true
-            }
-
-            override fun onVerificationCompleted(credential: PhoneAuthCredential?) {
-                val code = credential?.smsCode
-
-                code?.let {
-                    if (isVisible)
-                        verificationCodePinView.setText(it)
-                }
-            }
-
-            override fun onCodeSent(id: String, forceResendingToken: PhoneAuthProvider.ForceResendingToken) {
-                super.onCodeSent(id, forceResendingToken)
-                forceResendToken = forceResendingToken
-                verificationId = id
-
-                if (isVisible)
-                    verificationCodePinView.isEnabled = true
-
-                startResendTimer()
-            }
-        }
     }
 
     private fun sendVerificationCode(phoneNumber: String) {

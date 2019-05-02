@@ -6,10 +6,12 @@ import com.google.firebase.messaging.RemoteMessage
 import com.project.smartphonecompanionandroid.utils.ContactUtils
 import com.project.smartphonecompanionandroid.utils.FCMUtils
 import com.project.smartphonecompanionandroid.utils.SMSUtils
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 
-class FCMService : FirebaseMessagingService() {
+class FCMService : FirebaseMessagingService(), AnkoLogger {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        Log.d("FCMService", remoteMessage.data.toString())
+        info("Received message $remoteMessage")
 
         remoteMessage.data.entries.forEach {
             when (it.key) {
@@ -22,6 +24,7 @@ class FCMService : FirebaseMessagingService() {
     }
 
     override fun onNewToken(token: String?) {
+        info("New token: $token")
         FCMUtils.saveMobileTokenToFirebase(token)
     }
 }

@@ -12,16 +12,22 @@ import kotlinx.android.synthetic.main.fragment_phone_number.*
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.text.HtmlCompat
 import com.project.smartphonecompanionandroid.R
+import com.project.smartphonecompanionandroid.utils.instanceOf
 import com.project.smartphonecompanionandroid.utils.replaceFragment
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
+import org.jetbrains.anko.warn
 
 
-class PhoneNumberFragment : Fragment() {
+class PhoneNumberFragment : Fragment(), AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_phone_number, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        info("Starting PhoneNumberFragment")
 
         nextButton.setOnClickListener { showConfirmationDialog() }
 
@@ -58,13 +64,13 @@ class PhoneNumberFragment : Fragment() {
         val phoneNumber = countryCodePicker.fullNumberWithPlus
 
         if (countryCodePicker.isValidFullNumber) {
-            val fragment = VerificationCodeFragment().apply {
-                val bundle = Bundle()
-                bundle.putString("phoneNumber", phoneNumber)
-                arguments = bundle
-            }
+            info("Valid phone number")
+
+            val fragment = instanceOf<VerificationCodeFragment>("phoneNumber" to phoneNumber)
 
             requireActivity().replaceFragment(fragment)
+        } else {
+            warn("Invalid phone number")
         }
     }
 }

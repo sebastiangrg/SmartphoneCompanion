@@ -1,12 +1,13 @@
 package com.project.smartphonecompanionandroid.utils
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.iid.FirebaseInstanceId
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
+import org.jetbrains.anko.warn
 
-object FCMUtils {
-    private const val TAG = "FCMUtils"
+object FCMUtils : AnkoLogger {
 
     fun saveMobileTokenToFirebase(mobileToken: String? = null) {
         fun saveToFirebase(token: String) {
@@ -14,7 +15,7 @@ object FCMUtils {
             val uid = FirebaseAuth.getInstance().uid
 
             if (uid != null) {
-                Log.d(TAG, uid)
+                info("Firebase UID: $uid")
                 firebaseDatabase.reference
                     .child("users")
                     .child(uid)
@@ -29,18 +30,17 @@ object FCMUtils {
             FirebaseInstanceId.getInstance().instanceId
                 .addOnCompleteListener { task ->
                     if (!task.isSuccessful) {
-                        Log.d(TAG, "getInstanceId failed", task.exception)
+                        warn("getInstanceId failed ${task.exception}")
                     } else {
                         val token = task.result?.token
 
                         token?.let {
-                            Log.d(TAG, token)
-
+                            info("Token: $token")
                             saveToFirebase(it)
                         }
                     }
                 }
-                .addOnFailureListener { Log.d(TAG, it.message) }
+                .addOnFailureListener { warn("Error getting the token ${it.message})") }
         }
     }
 }

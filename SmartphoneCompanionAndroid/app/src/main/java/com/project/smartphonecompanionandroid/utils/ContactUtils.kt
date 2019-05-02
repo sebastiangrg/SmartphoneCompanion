@@ -2,25 +2,28 @@ package com.project.smartphonecompanionandroid.utils
 
 import android.content.Context
 import android.provider.ContactsContract
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
+import org.jetbrains.anko.warn
 
 data class Contact(
     val name: String,
     val phoneNumber: String
 )
 
-object ContactUtils {
-    private const val TAG = "ContactUtils"
+object ContactUtils : AnkoLogger {
 
     fun syncContacts(context: Context) {
-        Log.d(TAG, "Synchronizing contacts")
+        info("Synchronizing contacts")
 
         val contacts = getContacts(context)
         val contactsMap = HashMap<String, String>()
+
+        info("Contacts:")
         contacts.forEach {
-            Log.d(TAG, it.toString())
+            info(it.toString())
             contactsMap[it.phoneNumber] = it.name
         }
 
@@ -28,15 +31,16 @@ object ContactUtils {
         val uid = FirebaseAuth.getInstance().uid
 
         if (uid != null) {
-            Log.d(TAG, uid)
+            info("Firebase UID: $uid")
             firebaseDatabase.reference
                 .child("users")
                 .child(uid)
                 .child("contacts")
                 .updateChildren(contactsMap as Map<String, Any>)
+                .addOnFailureListener { warn("Synchronizing contacts to Firebase failed") }
+                .addOnCanceledListener { warn("Synchronizing contacts to Firebase canceled") }
+                .addOnCompleteListener { info("Done synchronizing contacts") }
         }
-
-        Log.d(TAG, "Done synchronizing contacts")
     }
 
     private fun getContacts(context: Context): List<Contact> {
@@ -52,6 +56,7 @@ object ContactUtils {
         )
 
         contacts?.use {
+            info("Getting contacts")
             val displayName = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
             val phoneNumber = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
 

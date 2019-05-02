@@ -3,7 +3,6 @@ package com.project.smartphonecompanionandroid.utils
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -12,12 +11,14 @@ import androidx.fragment.app.FragmentActivity
 import com.google.android.material.snackbar.Snackbar
 import com.project.smartphonecompanionandroid.R
 import com.project.smartphonecompanionandroid.ui.activities.MainActivity
-
+import androidx.core.os.bundleOf
 
 fun FragmentActivity.replaceFragment(fragment: Fragment, clearBackStack: Boolean = false) {
     val containerId = when (this) {
         is MainActivity -> R.id.main_container
-        else -> -1
+        else -> {
+            -1
+        }
     }
 
     if (clearBackStack) {
@@ -74,4 +75,19 @@ fun Fragment.clearFocusAndCloseKeyboard() {
             0
         )
     }
+}
+
+/**
+ * Pass arguments to a Fragment without the hassle of
+ * creating a static newInstance() method for every Fragment.
+ *
+ * Declared outside any class to have full access in any
+ * part of your package.
+ *
+ * Usage: instanceOf<MyFragment>("foo" to true, "bar" to 0)
+ *
+ * @return Returns an instance of Fragment as the specified generic type with the params applied as arguments
+ */
+inline fun <reified T : Fragment> instanceOf(vararg params: Pair<String, Any>): T = T::class.java.newInstance().apply {
+    arguments = bundleOf(*params)
 }

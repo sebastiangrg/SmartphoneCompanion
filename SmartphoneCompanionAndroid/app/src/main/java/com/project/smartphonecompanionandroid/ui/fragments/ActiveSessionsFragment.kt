@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
@@ -16,9 +15,11 @@ import com.project.smartphonecompanionandroid.R
 import com.project.smartphonecompanionandroid.utils.replaceFragment
 import com.project.smartphonecompanionandroid.utils.snackbar
 import kotlinx.android.synthetic.main.fragment_active_sessions.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 
 
-class ActiveSessionsFragment : Fragment() {
+class ActiveSessionsFragment : Fragment(), AnkoLogger {
     companion object {
         private const val READ_SMS_PERMISSION_REQUEST_CODE = 2
     }
@@ -32,6 +33,8 @@ class ActiveSessionsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        info("Starting ActiveSessionsFragment")
 
         user = FirebaseAuth.getInstance().currentUser
 
@@ -52,7 +55,7 @@ class ActiveSessionsFragment : Fragment() {
             ) {
                 requestPermissions(Array(READ_SMS_PERMISSION_REQUEST_CODE) { Manifest.permission.READ_SMS }, 1)
             } else {
-                Log.d("ActiveSessions", "Permission granted")
+                info("Permission granted")
             }
         }
     }
