@@ -10,8 +10,14 @@ import com.project.smartphonecompanionandroid.utils.FCMUtils
 import com.project.smartphonecompanionandroid.utils.replaceFragment
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
+import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity(), AnkoLogger {
+    companion object {
+        private const val BACK_BUTTON_PRESSING_INTERVAL = 2000L
+    }
+
+    private var backButtonPressedTime = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +35,21 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
             this.replaceFragment(activeSessionsFragment, clearBackStack = true)
 
             FCMUtils.saveMobileTokenToFirebase()
+        }
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            // going to the previous fragment
+            super.onBackPressed()
+        } else {
+            // exiting the app
+            if (backButtonPressedTime + BACK_BUTTON_PRESSING_INTERVAL > System.currentTimeMillis()) {
+                super.onBackPressed()
+            } else {
+                toast("Press again to exit")
+                backButtonPressedTime = System.currentTimeMillis()
+            }
         }
     }
 }
