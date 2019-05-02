@@ -72,7 +72,7 @@ export class MainContainerComponent implements OnInit {
       )
       .subscribe(
         (res: any) => {
-          console.log(res);
+          //console.log(res);
         });
   }
 

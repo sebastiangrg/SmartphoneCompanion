@@ -1,9 +1,14 @@
-.qr-code>img {
-    border: 1px solid black;
-    width: 148px;
-    height: 148px;
-}
+$primary: #fee715;
+$primaryLight: #ffff5b;
+$primaryDark: #9B8E00;
+$secondary: #303030;
+$secondaryLight: #424242;
+$secondaryDark:#212121;
+$primaryText: #000000;
+$secondaryText: #ffffff;
 
-* {
-    text-align: center;
+@import "node_modules/bootstrap/scss/bootstrap";
+
+body {
+    background-color: $secondaryDark;
 }
