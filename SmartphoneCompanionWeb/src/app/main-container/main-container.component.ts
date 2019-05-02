@@ -42,8 +42,31 @@ export class MainContainerComponent implements OnInit {
         }));
   }
 
-  syncConversations() {
-    this.syncService.syncConversations()
+  syncLastMessages() {
+    this.syncService.syncLastMessages()
+      .pipe(
+        take(1)
+      )
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+        });
+  }
+
+  syncContacts() {
+    this.syncService.syncContacts()
+      .pipe(
+        take(1)
+      )
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+        });
+  }
+
+  syncConversation() {
+    const thread = 145;
+    this.syncService.syncConversation(thread)
       .pipe(
         take(1)
       )

@@ -21,13 +21,13 @@ function getMobileToken(uid: string): Promise<any> {
     return admin.database().ref("/users").child(uid).child("mobileToken").once('value');
 }
 
-async function sendSyncMessage(auth: any, sync: string): Promise<any> {
+async function sendSyncMessage(auth: any, data: any): Promise<any> {
     if (auth) {
         const uid = auth.uid;
         const mobileToken = await getMobileToken(uid);
 
         if (mobileToken.exists()) {
-            return admin.messaging().sendToDevice(mobileToken.val(), { data: { sync: sync } });
+            return admin.messaging().sendToDevice(mobileToken.val(), { data: data });
         } else {
             console.log("Mobile token error");
             return null;
@@ -65,24 +65,17 @@ export const pairWithUID = functions.https.onCall(async (data, context) => {
     }
 });
 
-export const syncConversations = functions.https.onCall(async (data, context) => {
-    return sendSyncMessage(context.auth, "conversations");
+export const syncLastMessages = functions.https.onCall(async (data, context) => {
+    return sendSyncMessage(context.auth, { syncLastMessages: "true" });
 });
-
-export const syncSent = functions.https.onCall(async (data, context) => {
-    return sendSyncMessage(context.auth, "sent");
-});
-
-
-export const syncReceived = functions.https.onCall(async (data, context) => {
-    return sendSyncMessage(context.auth, "received");
-});
-
 
 export const syncContacts = functions.https.onCall(async (data, context) => {
-    return sendSyncMessage(context.auth, "contacts");
+    return sendSyncMessage(context.auth, { syncContacts: "true" });
 });
 
-export const syncSentAndReceived = functions.https.onCall(async (data, context) => {
-    return sendSyncMessage(context.auth, "sent|received");
+export const syncConversation = functions.https.onCall(async (data, context) => {
+    if (data.thread) {
+        return sendSyncMessage(context.auth, { syncConversation: data.thread });
+    }
+    return null
 });

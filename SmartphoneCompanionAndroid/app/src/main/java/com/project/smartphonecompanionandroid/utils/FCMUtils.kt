@@ -6,6 +6,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.iid.FirebaseInstanceId
 
 object FCMUtils {
+    private const val TAG = "FCMUtils"
 
     fun saveMobileTokenToFirebase(mobileToken: String? = null) {
         fun saveToFirebase(token: String) {
@@ -13,7 +14,7 @@ object FCMUtils {
             val uid = FirebaseAuth.getInstance().uid
 
             if (uid != null) {
-                Log.d("FCMUtils", uid)
+                Log.d(TAG, uid)
                 firebaseDatabase.reference
                     .child("users")
                     .child(uid)
@@ -28,18 +29,18 @@ object FCMUtils {
             FirebaseInstanceId.getInstance().instanceId
                 .addOnCompleteListener { task ->
                     if (!task.isSuccessful) {
-                        Log.d("FCMUtils", "getInstanceId failed", task.exception)
+                        Log.d(TAG, "getInstanceId failed", task.exception)
                     } else {
                         val token = task.result?.token
 
                         token?.let {
-                            Log.d("FCMUtils", token)
+                            Log.d(TAG, token)
 
                             saveToFirebase(it)
                         }
                     }
                 }
-                .addOnFailureListener { Log.d("FCMUtils", it.message) }
+                .addOnFailureListener { Log.d(TAG, it.message) }
         }
     }
 }
