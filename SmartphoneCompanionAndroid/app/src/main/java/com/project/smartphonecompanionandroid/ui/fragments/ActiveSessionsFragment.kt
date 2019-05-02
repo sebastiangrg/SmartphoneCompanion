@@ -1,29 +1,26 @@
 package com.project.smartphonecompanionandroid.ui.fragments
 
 import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.view.*
-import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.nabinbhandari.android.permissions.PermissionHandler
+import com.nabinbhandari.android.permissions.Permissions
 import com.project.smartphonecompanionandroid.R
 import com.project.smartphonecompanionandroid.utils.replaceFragment
-import com.project.smartphonecompanionandroid.utils.snackbar
 import kotlinx.android.synthetic.main.fragment_active_sessions.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
+import android.content.Context
+import com.project.smartphonecompanionandroid.utils.FCMUtils
+import java.util.ArrayList
 
 
 class ActiveSessionsFragment : Fragment(), AnkoLogger {
-    companion object {
-        private const val READ_SMS_PERMISSION_REQUEST_CODE = 2
-    }
-
     private var user: FirebaseUser? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -47,17 +44,31 @@ class ActiveSessionsFragment : Fragment(), AnkoLogger {
 
         addButton.setOnClickListener { addSession() }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.CAMERA
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                requestPermissions(Array(READ_SMS_PERMISSION_REQUEST_CODE) { Manifest.permission.READ_SMS }, 1)
-            } else {
-                info("Permission granted")
-            }
+        intro7cardView.setOnClickListener {
+            requestSMSAndContactsPermissions()
         }
+
+        requestSMSAndContactsPermissions()
+
+        FCMUtils.saveMobileTokenToFirebase()
+    }
+
+    private fun requestSMSAndContactsPermissions() {
+        val permissions = arrayOf(
+            Manifest.permission.READ_SMS,
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.RECEIVE_SMS
+        )
+
+        Permissions.check(requireContext(), permissions, null, null, object : PermissionHandler() {
+            override fun onGranted() {
+                intro7cardView.visibility = View.GONE
+            }
+
+            override fun onDenied(context: Context?, deniedPermissions: ArrayList<String>?) {
+                intro7cardView.visibility = View.VISIBLE
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -76,8 +87,16 @@ class ActiveSessionsFragment : Fragment(), AnkoLogger {
     }
 
     private fun addSession() {
-        val fragment = QRCodeScannerFragment()
-        requireActivity().replaceFragment(fragment)
+        Permissions.check(
+            requireContext(),
+            Manifest.permission.CAMERA,
+            R.string.camera_permission_rationale,
+            object : PermissionHandler() {
+                override fun onGranted() {
+                    val fragment = QRCodeScannerFragment()
+                    requireActivity().replaceFragment(fragment)
+                }
+            })
     }
 
     private fun signOut() {
@@ -88,18 +107,5 @@ class ActiveSessionsFragment : Fragment(), AnkoLogger {
     private fun goToSignInFlow() {
         val fragment = PhoneNumberFragment()
         requireActivity().replaceFragment(fragment, clearBackStack = true)
-    }
-
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            READ_SMS_PERMISSION_REQUEST_CODE ->
-                // if the request is cancelled, the result arrays are empty
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    snackbar("Permission granted")
-                } else {
-                    snackbar("You declined to allow the app to access your camera")
-                }
-        }
     }
 }

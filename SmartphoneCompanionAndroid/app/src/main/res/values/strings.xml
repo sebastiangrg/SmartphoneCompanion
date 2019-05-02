@@ -34,4 +34,10 @@
     <string name="intro_6">Visit <u>smartphone-companion.firebaseapp.com</u> on your
         computer in order to pair your device and use the app.
     </string>
+    <string name="camera_permission_rationale">In order to scan the QR Code and pair your device to your computer, we
+        need permission to use the camera.
+    </string>
+    <string name="intro_7">We need your permission to access your <b>SMS messages</b> and <b>contacts</b> so that we can
+        sync them to your computer.
+    </string>
 </resources>

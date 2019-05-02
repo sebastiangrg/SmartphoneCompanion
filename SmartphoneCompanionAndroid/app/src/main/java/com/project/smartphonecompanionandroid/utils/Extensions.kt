@@ -1,6 +1,7 @@
 package com.project.smartphonecompanionandroid.utils
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -75,6 +76,10 @@ fun Fragment.clearFocusAndCloseKeyboard() {
             0
         )
     }
+}
+
+fun Context.hasPermission(permission: String): Boolean {
+    return checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
 }
 
 /**

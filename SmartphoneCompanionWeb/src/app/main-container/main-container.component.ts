@@ -65,7 +65,7 @@ export class MainContainerComponent implements OnInit {
   }
 
   syncConversation() {
-    const thread = 145;
+    const thread = 258;
     this.syncService.syncConversation(thread)
       .pipe(
         take(1)

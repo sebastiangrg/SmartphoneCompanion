@@ -1,8 +1,6 @@
 package com.project.smartphonecompanionandroid.ui.fragments
 
 import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
@@ -19,7 +16,7 @@ import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.functions.FirebaseFunctionsException
-import com.project.smartphonecompanionandroid.utils.snackbar
+import com.project.smartphonecompanionandroid.utils.hasPermission
 import kotlinx.android.synthetic.main.fragment_qrcode_scanner.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
@@ -28,10 +25,6 @@ import java.io.IOException
 
 
 class QRCodeScannerFragment : Fragment(), AnkoLogger {
-    companion object {
-        private const val CAMERA_PERMISSION_REQUEST_CODE = 1
-    }
-
     private lateinit var cameraSource: CameraSource
     private lateinit var barcodeDetector: BarcodeDetector
 
@@ -52,18 +45,13 @@ class QRCodeScannerFragment : Fragment(), AnkoLogger {
             requireActivity().onBackPressed()
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.CAMERA
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                requestPermissions(Array(CAMERA_PERMISSION_REQUEST_CODE) { Manifest.permission.CAMERA }, 1)
-            } else {
-                startScanning()
-            }
+        if (requireContext().hasPermission(Manifest.permission.CAMERA)) {
+            startScanning()
+        } else {
+            requireActivity().onBackPressed()
         }
     }
+
 
     private fun startScanning() {
         barcodeDetector = BarcodeDetector.Builder(requireContext())
@@ -154,21 +142,13 @@ class QRCodeScannerFragment : Fragment(), AnkoLogger {
             }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            CAMERA_PERMISSION_REQUEST_CODE ->
-                // if the request is cancelled, the result arrays are empty
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startScanning()
-                } else {
-                    snackbar("You declined to allow the app to access your camera")
-                }
-        }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
-        barcodeDetector.release()
-        cameraSource.release()
+        if (::barcodeDetector.isInitialized) {
+            barcodeDetector.release()
+        }
+        if (::cameraSource.isInitialized) {
+            cameraSource.release()
+        }
     }
 }

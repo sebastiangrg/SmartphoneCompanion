@@ -8,7 +8,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.project.smartphonecompanionandroid"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -51,6 +51,9 @@ dependencies {
 
     //LOGGING
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
+
+    //PERMISSIONS
+    implementation 'com.nabinbhandari.android:permissions:3.8'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0-alpha04'
