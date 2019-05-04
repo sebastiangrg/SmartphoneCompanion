@@ -1,14 +1,9 @@
 @import "../../styles.scss";
 
 .qr-code-card {
-    width: 160px;
-    height: 160px;
-    border: 6px solid $primary;
-    box-sizing: border-box;
-    background-color: $secondary;
-
-    .qr-code>img {
-        width: 148px;
-        height: 148px;
-    }
+    width: 208px;
+    height: 208px;
+    padding-top: 4px;
+    padding-left: 4px;
+    background-color: $primary;
 }

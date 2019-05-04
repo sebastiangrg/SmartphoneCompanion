@@ -1,5 +1,5 @@
-<div class="content mx-auto py-5 col-lg-8">
-  <div class="card bg-secondary">
+<div class="content mx-auto col-lg-8">
+  <div class="card bg-secondary my-4">
     <div class="card-header bg-primary">
       <h2>Smartphone Companion</h2>
     </div>
@@ -10,18 +10,18 @@
         Companion on your Android device, follow the instructions to sign in and scan the code below:</p>
 
       <!--QR Code-->
-      <div class="card text-center mx-auto my-5 qr-code-card">
+      <div class="card mx-auto my-5 qr-code-card">
         <ng-container *ngIf="user$ | async as user; else loading">
-          <ngx-qrcode [qrc-value]="user.uid" qrc-class="qr-code" [qrc-element-type]="'img'"></ngx-qrcode>
+          <qr-code [value]="user.uid" [size]="200" [level]="'Q'" [background]="'#fee715'"></qr-code>
         </ng-container>
         <ng-template #loading>
-          <div class="spinner-grow text-primary mx-auto my-auto">
+          <div class="spinner-grow text-secondary mx-auto my-auto">
             <span class="sr-only">Loading...</span>
           </div>
         </ng-template>
       </div>
 
-      <p class="text-primary text-justify my-5 col-lg-6 mx-auto">Please make sure you have a stable internet
+      <p class="text-primary text-justify my-3 col-lg-6 mx-auto">Please make sure you have a stable internet
         connection on both your computer and your smartphone.</p>
     </div>
   </div>
