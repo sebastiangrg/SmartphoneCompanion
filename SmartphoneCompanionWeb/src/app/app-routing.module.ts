@@ -4,12 +4,29 @@ import { MainContainerComponent } from './main-container/main-container.componen
 import { AuthGuard } from './services/auth.guard';
 import { AnonGuard } from './services/anon.guard';
 import { SignInComponent } from './sign-in/sign-in.component';
+import { MessagesComponent } from './messages/messages.component';
+import { ContactsComponent } from './contacts/contacts.component';
 
 const routes: Routes = [
   {
     path: '',
     component: MainContainerComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'messages',
+        component: MessagesComponent
+      },
+      {
+        path: 'contacts',
+        component: ContactsComponent
+      },
+      {
+        path: '',
+        redirectTo: 'messages',
+        pathMatch: 'full'
+      }
+    ]
   },
   {
     path: 'signIn',

@@ -1,13 +1,35 @@
-<div class="main-container">
-  <ng-container *ngIf="data$ | async; else loading">
-    <h1>User {{ user.phoneNumber }}</h1>
-    <button (click)="signOut()">Sign Out</button>
-    <br>
-    <button (click)="syncLastMessages()">Sync last messages</button>
-    <button (click)="syncContacts()">Sync contacts</button>
-    <button (click)="syncConversation()">Sync conversation</button>
-  </ng-container>
-  <ng-template #loading>
-    <h1>Loading</h1>
-  </ng-template>
+<div class="content mx-auto col-lg-8">
+  <div class="card bg-secondary my-4">
+    <div class="card-header bg-primary">
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" [routerLink]="[ '/messages' ]">
+          <img src="assets/logo.png" width="32" height="32" class="d-inline-block align-top mr-2">
+          Smartphone Companion
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <div class="navbar-nav">
+            <a class="nav-item nav-link" [routerLink]="[ '/messages' ]" routerLinkActive="active">Messages</a>
+            <a class="nav-item nav-link" [routerLink]="[ '/contacts' ]" routerLinkActive="active">Contacts</a>
+          </div>
+        </div>
+        <span class="sign-out-button ml-auto" (click)="signOut()">Sign Out</span>
+      </nav>
+    </div>
+    <div class="card-body">
+      <router-outlet></router-outlet>
+      <ng-container *ngIf="data$ | async; else loading">
+        <h1>User {{ user.phoneNumber }}</h1>
+        <button (click)="syncLastMessages()">Sync last messages</button>
+        <button (click)="syncContacts()">Sync contacts</button>
+        <button (click)="syncConversation()">Sync conversation</button>
+      </ng-container>
+      <ng-template #loading>
+        <h1>Loading</h1>
+      </ng-template>
+    </div>
+  </div>
 </div>

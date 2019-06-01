@@ -12,12 +12,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MainContainerComponent } from './main-container/main-container.component';
 import { SignInComponent } from './sign-in/sign-in.component';
+import { MessagesComponent } from './messages/messages.component';
+import { ContactsComponent } from './contacts/contacts.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainContainerComponent,
-    SignInComponent
+    SignInComponent,
+    MessagesComponent,
+    ContactsComponent
   ],
   imports: [
     BrowserModule,
