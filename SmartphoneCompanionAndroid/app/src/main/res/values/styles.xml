@@ -8,7 +8,7 @@
     </style>
 
     <style name="FilledBox" parent="ShapeAppearanceOverlay.MaterialComponents.TextInputLayout.FilledBox">
-        <item name="android:textColorHint">@color/primaryDarkColor</item>
+        <item name="android:textColorHint">@color/secondaryTextColor</item>
     </style>
 
     <style name="Dialog" parent="Theme.MaterialComponents.Dialog.Alert">
@@ -17,6 +17,6 @@
     </style>
 
     <style name="DialogButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/primaryColor</item>
+        <item name="android:textColor">@color/secondaryTextColor</item>
     </style>
 </resources>

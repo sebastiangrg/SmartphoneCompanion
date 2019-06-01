@@ -17,7 +17,7 @@
             android:text="@string/welcome"
             android:textAlignment="center"
             android:textSize="20sp"
-            android:textColor="@color/primaryColor"/>
+            android:textColor="@color/secondaryTextColor"/>
 
     <TextView
             android:id="@+id/intro1TextView"
@@ -26,7 +26,7 @@
             android:layout_marginTop="64dp"
             app:layout_constraintTop_toBottomOf="@+id/welcomeTextView"
             android:text="@string/intro_1"
-            android:textColor="@color/primaryColor"
+            android:textColor="@color/secondaryTextColor"
             android:textSize="15sp"/>
 
     <com.hbb20.CountryCodePicker
@@ -38,7 +38,7 @@
             app:ccpDialog_backgroundColor="@color/secondaryLightColor"
             app:ccpDialog_textColor="@color/secondaryTextColor"
             android:padding="12dp"
-            app:ccp_contentColor="@color/primaryColor"
+            app:ccp_contentColor="@color/secondaryTextColor"
             android:background="@color/secondaryLightColor"
             app:ccp_showFullName="true"
             app:ccp_showNameCode="false"
@@ -61,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="phone"
-                android:textColor="@color/primaryColor"
+                android:textColor="@color/secondaryTextColor"
                 android:textAlignment="center"
                 android:singleLine="true"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -85,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/intro_2"
-                android:textColor="@color/primaryColor"
+                android:textColor="@color/secondaryTextColor"
                 android:visibility="gone"/>
     </LinearLayout>
 

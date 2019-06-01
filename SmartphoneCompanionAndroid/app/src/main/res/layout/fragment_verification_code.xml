@@ -18,7 +18,7 @@
             android:text="@string/verifying_your_phone_number"
             android:textAlignment="center"
             android:textSize="20sp"
-            android:textColor="@color/primaryColor"/>
+            android:textColor="@color/secondaryTextColor"/>
 
     <TextView
             android:id="@+id/intro3TextView"
@@ -27,7 +27,7 @@
             android:layout_marginTop="64dp"
             app:layout_constraintTop_toBottomOf="@+id/verifyingNumberTextView"
             android:text="@string/intro_3"
-            android:textColor="@color/primaryColor"
+            android:textColor="@color/secondaryTextColor"
             android:textSize="15sp"/>
 
     <TextView
@@ -37,7 +37,7 @@
             android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@+id/intro3TextView"
             android:text="@string/wrong_number"
-            android:textColor="@color/primaryColor"
+            android:textColor="@color/secondaryTextColor"
             android:textStyle="bold"
             android:textSize="15sp"/>
 
@@ -73,7 +73,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/intro_4"
             android:textAlignment="center"
-            android:textColor="@color/primaryColor"/>
+            android:textColor="@color/secondaryTextColor"/>
 
 
     <com.google.android.material.button.MaterialButton

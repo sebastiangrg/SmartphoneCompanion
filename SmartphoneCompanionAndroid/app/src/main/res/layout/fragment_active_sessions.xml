@@ -25,7 +25,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:textAlignment="center"
-            android:textColor="@color/primaryColor"/>
+            android:textColor="@color/secondaryTextColor"/>
 
     <TextView
             android:id="@+id/intro6TextView"
@@ -37,7 +37,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textAlignment="center"
-            android:textColor="@color/primaryColor"/>
+            android:textColor="@color/secondaryTextColor"/>
 
     <com.google.android.material.card.MaterialCardView
             android:id="@+id/intro7cardView"

@@ -4,15 +4,15 @@
       <h2>Smartphone Companion</h2>
     </div>
     <div class="card-body">
-      <h3 class="text-primary text-center">Welcome to Smartphone Companion</h3>
+      <h3 class="text-light text-center">Welcome to Smartphone Companion</h3>
 
-      <p class="text-primary text-justify mt-5 col-lg-6 mx-auto">To sign in on this computer, please open Smartphone
+      <p class="text-light text-justify mt-5 col-lg-6 mx-auto">To sign in on this computer, please open Smartphone
         Companion on your Android device, follow the instructions to sign in and scan the code below:</p>
 
       <!--QR Code-->
       <div class="card mx-auto my-5 qr-code-card">
         <ng-container *ngIf="user$ | async as user; else loading">
-          <qr-code [value]="user.uid" [size]="200" [level]="'Q'" [background]="'#fee715'"></qr-code>
+          <qr-code [value]="user.uid" [size]="200" [level]="'Q'"></qr-code>
         </ng-container>
         <ng-template #loading>
           <div class="spinner-grow text-secondary mx-auto my-auto">
@@ -21,7 +21,7 @@
         </ng-template>
       </div>
 
-      <p class="text-primary text-justify my-3 col-lg-6 mx-auto">Please make sure you have a stable internet
+      <p class="text-light text-justify my-3 col-lg-6 mx-auto">Please make sure you have a stable internet
         connection on both your computer and your smartphone.</p>
     </div>
   </div>
