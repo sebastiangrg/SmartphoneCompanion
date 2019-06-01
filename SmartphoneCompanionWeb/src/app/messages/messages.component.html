@@ -1,3 +1,39 @@
-<p>
-  messages works!
-</p>
+<div class="row px-0">
+  <div class="last-messages col-lg-4">
+    <ng-container *ngIf="lastMessages else loading">
+      <ng-container *ngFor="let message of lastMessages">
+        <div [ngClass]="message.thread == selectedConversation ? 'active' : ''"
+          (click)="selectConversation(message.thread)" class="row message">
+          <div class="col-lg-1 pt-2 text-right">
+            <span class="contact-icon text-center">
+              {{ getInitial(message.phoneNumber) }}
+            </span>
+          </div>
+          <div class="col-lg-11 pl-4">
+            <div class="row mt-1">
+              <span class="col-lg-7 text-light">{{ getContactName(message.phoneNumber) }}</span>
+              <span class="col-lg-5 small font-weight-light text-light text-right">
+                {{ message.datetime.time | date: 'dd MMM yy H:mm' }}
+              </span>
+            </div>
+            <div class="row mb-2">
+              <span class="col-lg-12 small text-light">
+                {{ message.content.length > 48 ? (message.content | slice: 0:48) + '...' : message.content }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+
+  <div class="conversation col-lg-8 border-left border-primary">
+    <ng-container *ngIf="">
+
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #loading>
+  loading
+</ng-template>

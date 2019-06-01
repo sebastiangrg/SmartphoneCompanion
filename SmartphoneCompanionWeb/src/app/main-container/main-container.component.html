@@ -1,4 +1,4 @@
-<div class="content mx-auto col-lg-8">
+<div class="content mx-auto">
   <div class="card bg-secondary my-4">
     <div class="card-header bg-primary">
       <nav class="navbar navbar-expand-lg navbar-light">
@@ -16,20 +16,11 @@
             <a class="nav-item nav-link" [routerLink]="[ '/contacts' ]" routerLinkActive="active">Contacts</a>
           </div>
         </div>
-        <span class="sign-out-button ml-auto" (click)="signOut()">Sign Out</span>
+        <button class="btn bg-secondary text-primary ml-auto" (click)="signOut()">Sign Out</button>
       </nav>
     </div>
     <div class="card-body">
       <router-outlet></router-outlet>
-      <ng-container *ngIf="data$ | async; else loading">
-        <h1>User {{ user.phoneNumber }}</h1>
-        <button (click)="syncLastMessages()">Sync last messages</button>
-        <button (click)="syncContacts()">Sync contacts</button>
-        <button (click)="syncConversation()">Sync conversation</button>
-      </ng-container>
-      <ng-template #loading>
-        <h1>Loading</h1>
-      </ng-template>
     </div>
   </div>
 </div>

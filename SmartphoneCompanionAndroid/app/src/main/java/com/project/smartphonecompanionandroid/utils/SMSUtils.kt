@@ -157,6 +157,7 @@ object SMSUtils : AnkoLogger {
             for (i in 0 until it.count) {
                 it.moveToNext()
                 list.add(
+                    //TODO TRY CATCH HERE
                     SMSMessage(
                         it.getString(body),
                         it.getString(address),

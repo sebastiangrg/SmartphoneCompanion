@@ -1,0 +1,19 @@
+@import '../../styles.scss';
+
+.contact-icon {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border-radius: 3px;
+  background-color: $primary;
+  color: $secondaryDark;
+  line-height: 32px;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.message:hover,
+.message.active {
+  background-color: $secondaryLight;
+  cursor: pointer;
+}
