@@ -12,3 +12,15 @@ $secondaryText: #ffffff;
 body {
   background-color: $secondaryDark;
 }
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: $secondaryLight;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $primary;
+}

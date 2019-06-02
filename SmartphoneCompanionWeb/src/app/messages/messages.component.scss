@@ -12,8 +12,37 @@
   font-weight: 500;
 }
 
-.message:hover,
-.message.active {
+.last-messages {
+  height: 512px;
+}
+
+.lastMessage:hover,
+.lastMessage.active {
   background-color: $secondaryLight;
   cursor: pointer;
+}
+
+.messages {
+  height: 448px;
+}
+
+.message.sent {
+  text-align: right;
+  background-color: $primary;
+  color: $primaryText;
+}
+
+.message.received {
+  text-align: left;
+  background-color: $secondaryLight;
+  color: $secondaryText;
+}
+
+.message {
+  max-width: 75%;
+
+  .message-date {
+    font-size: 10px;
+    float: right;
+  }
 }

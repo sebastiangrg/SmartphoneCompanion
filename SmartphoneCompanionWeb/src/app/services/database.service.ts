@@ -39,4 +39,8 @@ export class DatabaseService {
         })
       );
   }
+
+  public getConversation(uid: string, thread: number): AngularFireList<SMSMessage> {
+    return this.afDatabase.list<SMSMessage>('users/' + uid + '/messages/' + thread);
+  }
 }

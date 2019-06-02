@@ -3,5 +3,5 @@ export class SMSMessage {
     phoneNumber: string;
     datetime: any;
     thread: number;
-    isSender: boolean;
+    sender: boolean;
 }

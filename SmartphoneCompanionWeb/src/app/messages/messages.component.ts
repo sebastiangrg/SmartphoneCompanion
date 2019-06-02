@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { SyncService } from '../services/sync.service';
 import { DatabaseService } from '../services/database.service';
 import { SMSMessage } from '../model/SMSMessage';
-import { take } from 'rxjs/operators';
+import { take, tap, map } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { User } from 'firebase';
 import Utils from '../utils';
+import { Subscription, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-messages',
@@ -14,10 +15,14 @@ import Utils from '../utils';
 })
 export class MessagesComponent implements OnInit {
 
-  selectedConversation: number;
-  lastMessages: SMSMessage[];
-  contactNames: Map<string, string>;
   user: User;
+
+  contactNames: Map<string, string>;
+
+  lastMessages: SMSMessage[];
+
+  conversation$: Observable<SMSMessage[]>;
+  selectedConversation: number;
 
   constructor(
     private syncService: SyncService,
@@ -32,14 +37,14 @@ export class MessagesComponent implements OnInit {
       .pipe(take(1))
       .subscribe((user: User) => {
         this.user = user;
-        this.getContacts(user.uid);
-        this.getLastMessages(user.uid);
+        this.getContacts();
+        this.getLastMessages();
         this.syncService.syncLastMessages();
       });
   }
 
-  private getLastMessages(uid: string): void {
-    this.databaseService.getLastMessages(uid).valueChanges()
+  private getLastMessages(): void {
+    this.databaseService.getLastMessages(this.user.uid).valueChanges()
       .pipe(take(1))
       .subscribe((messages: SMSMessage[]) => {
         this.lastMessages = messages.sort((a, b) => b.datetime.time - a.datetime.time);
@@ -47,12 +52,21 @@ export class MessagesComponent implements OnInit {
       });
   }
 
-  private getContacts(uid: string): void {
-    this.databaseService.getContacts(uid)
+  private getContacts(): void {
+    this.databaseService.getContacts(this.user.uid)
       .pipe(take(1))
       .subscribe((contacts: Map<string, string>) => {
         this.contactNames = contacts;
       });
+  }
+
+  private getConversation(thread: number): void {
+    this.conversation$ = this.databaseService.getConversation(this.user.uid, thread).valueChanges()
+      .pipe(
+        map((conversation: SMSMessage[]) => {
+          return conversation.sort((a, b) => a.datetime.time - b.datetime.time);
+        })
+      );
   }
 
   getContactName(phoneNumber: string): string {
@@ -74,5 +88,6 @@ export class MessagesComponent implements OnInit {
   selectConversation(thread: number): void {
     this.selectedConversation = thread;
     this.syncService.syncConversation(thread);
+    this.getConversation(thread);
   }
 }
