@@ -1,28 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { SyncService } from '../services/sync.service';
 import { DatabaseService } from '../services/database.service';
 import { SMSMessage } from '../model/SMSMessage';
-import { take, tap, map } from 'rxjs/operators';
+import { take, map, tap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { User } from 'firebase';
 import Utils from '../utils';
-import { Subscription, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-messages',
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss']
 })
-export class MessagesComponent implements OnInit {
-
-  user: User;
-
-  contactNames: Map<string, string>;
-
-  lastMessages: SMSMessage[];
-
-  conversation$: Observable<SMSMessage[]>;
-  selectedConversation: number;
+export class MessagesComponent implements OnInit, AfterViewChecked {
 
   constructor(
     private syncService: SyncService,
@@ -30,7 +21,17 @@ export class MessagesComponent implements OnInit {
     private authService: AuthService
   ) {
     this.contactNames = new Map<string, string>();
+    this.selectedConversation = -1;
   }
+
+  user: User;
+
+  contactNames: Map<string, string>;
+
+  lastMessages$: Observable<SMSMessage[]>;
+
+  conversation$: Observable<SMSMessage[]>;
+  selectedConversation: number;
 
   ngOnInit() {
     this.authService.getUser()
@@ -40,21 +41,33 @@ export class MessagesComponent implements OnInit {
         this.getContacts();
         this.getLastMessages();
         this.syncService.syncLastMessages();
+        this.syncService.syncContacts();
       });
   }
 
+  ngAfterViewChecked() {
+    const container = document.getElementById('conversation');
+    container.scrollTop = container.scrollHeight;
+  }
+
   private getLastMessages(): void {
-    this.databaseService.getLastMessages(this.user.uid).valueChanges()
-      .pipe(take(1))
-      .subscribe((messages: SMSMessage[]) => {
-        this.lastMessages = messages.sort((a, b) => b.datetime.time - a.datetime.time);
-        this.selectedConversation = this.lastMessages.length > 0 ? this.lastMessages[0].thread : -1;
-      });
+    this.lastMessages$ = this.databaseService.getLastMessages(this.user.uid).valueChanges()
+      .pipe(
+        map((messages: SMSMessage[]) => {
+          return messages.sort((a, b) => b.datetime.time - a.datetime.time);
+        }),
+        tap((messages: SMSMessage[]) => {
+          if (this.selectedConversation === -1) {
+            this.selectedConversation = messages.length > 0 ? messages[0].thread : -1;
+          }
+          this.syncService.syncConversation(this.selectedConversation);
+          this.getConversation(this.selectedConversation);
+        })
+      );
   }
 
   private getContacts(): void {
     this.databaseService.getContacts(this.user.uid)
-      .pipe(take(1))
       .subscribe((contacts: Map<string, string>) => {
         this.contactNames = contacts;
       });
@@ -65,7 +78,7 @@ export class MessagesComponent implements OnInit {
       .pipe(
         map((conversation: SMSMessage[]) => {
           return conversation.sort((a, b) => a.datetime.time - b.datetime.time);
-        })
+        }),
       );
   }
 

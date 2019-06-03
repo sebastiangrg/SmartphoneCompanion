@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/database';
+import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
 import { SMSMessage } from '../model/SMSMessage';
 import { Observable } from 'rxjs';
-import { take, map } from 'rxjs/operators';
-import { stringify } from 'querystring';
+import { map } from 'rxjs/operators';
 import Utils from '../utils';
 
 @Injectable({
@@ -30,11 +29,13 @@ export class DatabaseService {
       .pipe(
         map((res: object) => {
           const contacts = new Map<string, string>();
-          Object.entries(res).forEach((c: [string, string]) => {
-            const name = c[1];
-            const phoneNumber = Utils.cleanPhoneNumber(c[0]);
-            contacts.set(phoneNumber, name);
-          });
+          if (res) {
+            Object.entries(res).forEach((c: [string, string]) => {
+              const name = c[1];
+              const phoneNumber = Utils.cleanPhoneNumber(c[0]);
+              contacts.set(phoneNumber, name);
+            });
+          }
           return contacts;
         })
       );

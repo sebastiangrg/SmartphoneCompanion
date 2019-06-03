@@ -1,6 +1,6 @@
 <div class="row px-0">
   <div class="last-messages overflow-auto col-lg-4">
-    <ng-container *ngIf="lastMessages else loading">
+    <ng-container *ngIf="lastMessages$ | async as lastMessages; else loading">
       <ng-container *ngFor="let message of lastMessages">
         <div [ngClass]="message.thread == selectedConversation ? 'active' : ''"
           (click)="selectConversation(message.thread)" class="row lastMessage">
@@ -13,11 +13,12 @@
             <div class="row mt-1">
               <span class="col-lg-7 text-light">{{ getContactName(message.phoneNumber) }}</span>
               <span class="col-lg-5 small font-weight-light text-light text-right">
-                {{ message.datetime.time | date: 'dd MMM yy H:mm' }}
+                {{ message.datetime.time | date: 'dd MMM yy HH:mm' }}
               </span>
             </div>
             <div class="row mb-2">
               <span class="col-lg-12 small text-light">
+                {{ message.sender ? 'You: ' : '' }}
                 {{ message.content.length > 48 ? (message.content | slice: 0:48) + '...' : message.content }}
               </span>
             </div>
@@ -28,7 +29,7 @@
   </div>
 
   <div class="conversation col-lg-8 border-left border-primary">
-    <div class="messages overflow-auto">
+    <div class="messages overflow-auto" id="conversation">
       <ng-container *ngIf="conversation$ | async as conversation; else loading">
         <ng-container *ngFor="let message of conversation">
 
@@ -37,7 +38,7 @@
               <div class="message p-2 my-1 mx-2 rounded" [ngClass]="message.sender ? 'sent ml-auto' : 'received'">
                 <span>{{ message.content }}</span>
                 <br>
-                <span class="message-date">{{ message.datetime.time | date: 'dd MMM yy H:mm'}}</span>
+                <span class="message-date">{{ message.datetime.time | date: 'dd MMM yy HH:mm'}}</span>
               </div>
             </div>
           </div>
@@ -49,5 +50,9 @@
 </div>
 
 <ng-template #loading>
-  loading
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <div class="spinner-grow text-primary">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
 </ng-template>

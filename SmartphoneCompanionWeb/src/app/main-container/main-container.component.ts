@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from 'firebase';
 import { AuthService } from '../services/auth.service';
-import { DatabaseService } from '../services/database.service';
 import { FCMService } from '../services/fcm.service';
 import { Router } from '@angular/router';
 import { tap, take } from 'rxjs/operators';

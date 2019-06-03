@@ -122,7 +122,7 @@ object SMSUtils : AnkoLogger {
 
         val sent = cr.query(
             Telephony.Sms.Sent.CONTENT_URI,
-            arrayOf(Telephony.Sms.ADDRESS, Telephony.Sms.BODY, Telephony.Sms.DATE, Telephony.Sms.THREAD_ID),
+            null,//arrayOf(Telephony.Sms.ADDRESS, Telephony.Sms.BODY, Telephony.Sms.DATE, Telephony.Sms.THREAD_ID),
             "${Telephony.Sms.THREAD_ID} = ?",
             arrayOf(thread.toString()),
             Telephony.Sms.Sent.DEFAULT_SORT_ORDER
@@ -136,7 +136,7 @@ object SMSUtils : AnkoLogger {
 
         val received = cr.query(
             Telephony.Sms.Inbox.CONTENT_URI,
-            arrayOf(Telephony.Sms.ADDRESS, Telephony.Sms.BODY, Telephony.Sms.DATE, Telephony.Sms.THREAD_ID),
+            null,//arrayOf(Telephony.Sms.ADDRESS, Telephony.Sms.BODY, Telephony.Sms.DATE, Telephony.Sms.THREAD_ID),
             "${Telephony.Sms.THREAD_ID} = ?",
             arrayOf(thread.toString()),
             Telephony.Sms.Inbox.DEFAULT_SORT_ORDER
@@ -156,16 +156,18 @@ object SMSUtils : AnkoLogger {
 
             for (i in 0 until it.count) {
                 it.moveToNext()
-                list.add(
-                    //TODO TRY CATCH HERE
-                    SMSMessage(
-                        it.getString(body),
-                        it.getString(address),
-                        Timestamp(it.getLong(date)),
-                        it.getLong(thread),
-                        isSender
+                try {
+                    list.add(
+                        SMSMessage(
+                            it.getString(body),
+                            it.getString(address),
+                            Timestamp(it.getLong(date)),
+                            it.getLong(thread),
+                            isSender
+                        )
                     )
-                )
+                } catch (_: Exception) {
+                }
             }
         }
 
