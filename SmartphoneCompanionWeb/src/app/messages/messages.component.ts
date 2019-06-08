@@ -1,13 +1,13 @@
-import { Component, OnInit, AfterViewChecked } from '@angular/core';
-import { SyncService } from '../services/sync.service';
-import { DatabaseService } from '../services/database.service';
-import { SMSMessage } from '../model/SMSMessage';
-import { take, map, tap } from 'rxjs/operators';
-import { AuthService } from '../services/auth.service';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { User } from 'firebase';
-import Utils from '../utils';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import { Contact } from '../model/Contact';
+import { SMSMessage } from '../model/SMSMessage';
+import { AuthService } from '../services/auth.service';
+import { DatabaseService } from '../services/database.service';
+import { SyncService } from '../services/sync.service';
+import Utils from '../utils';
 
 @Component({
   selector: 'app-messages',
@@ -34,6 +34,7 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
   selectedConversation: number;
 
   ngOnInit() {
+    this.conversation$ = of([]);
     this.authService.getUser()
       .pipe(take(1))
       .subscribe((user: User) => {
@@ -55,13 +56,6 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
       .pipe(
         map((messages: SMSMessage[]) => {
           return messages.sort((a, b) => b.datetime.time - a.datetime.time);
-        }),
-        tap((messages: SMSMessage[]) => {
-          if (this.selectedConversation === -1) {
-            this.selectedConversation = messages.length > 0 ? messages[0].thread : -1;
-          }
-          this.syncService.syncConversation(this.selectedConversation);
-          this.getConversation(this.selectedConversation);
         })
       );
   }

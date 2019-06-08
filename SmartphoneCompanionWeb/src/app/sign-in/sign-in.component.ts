@@ -1,11 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FCMService } from '../services/fcm.service';
-import { DatabaseService } from '../services/database.service';
-import { AuthService } from '../services/auth.service';
-import { User } from 'firebase';
-import { Observable, Subscription, from, of } from 'rxjs';
-import { tap, concatMap, map, take } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { User } from 'firebase';
+import { Observable, of, Subscription } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { AuthService } from '../services/auth.service';
+import { FCMService } from '../services/fcm.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -20,7 +19,6 @@ export class SignInComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private databaseService: DatabaseService,
     private fcmService: FCMService,
     private router: Router
   ) { }

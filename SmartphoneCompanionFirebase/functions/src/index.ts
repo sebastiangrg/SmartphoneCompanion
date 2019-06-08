@@ -1,68 +1,66 @@
-import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-
+import * as functions from 'firebase-functions';
 
 admin.initializeApp();
 
 function createCustomToken(auth: any): Promise<string> | null {
-    if (!auth) return null;
+    if (!auth || !auth.uid) return Promise.reject("Authentication error");
 
-    const uid = auth.uid;
-    if (!uid) return null;
-
-    return admin.auth().createCustomToken(uid);
+    return admin.auth().createCustomToken(auth.uid);
 }
 
 function getWebToken(uid: string): Promise<any> {
-    return admin.database().ref("/users").child(uid).child("webToken").once('value');
+    return admin.database()
+        .ref("/users")
+        .child(uid)
+        .child("webToken")
+        .once('value');
 }
 
 function getMobileToken(uid: string): Promise<any> {
-    return admin.database().ref("/users").child(uid).child("mobileToken").once('value');
+    return admin.database()
+        .ref("/users")
+        .child(uid)
+        .child("mobileToken")
+        .once('value');
 }
 
 async function sendSyncMessage(auth: any, data: any): Promise<any> {
-    if (auth) {
-        const uid = auth.uid;
-        const mobileToken = await getMobileToken(uid);
-
-        if (mobileToken.exists()) {
-            return admin.messaging().sendToDevice(mobileToken.val(), { data: data });
-        } else {
-            console.log("Mobile token error");
-            return null;
-        }
-    } else {
-        console.log("Auth error");
-        return null;
+    if (!auth || !auth.uid) {
+        return Promise.reject("Authentication error")
     }
+
+    return getMobileToken(auth.uid)
+        .then((mobileToken: any) => {
+            if (mobileToken.exists()) {
+                return Promise.resolve(mobileToken.val());
+            }
+            return Promise.reject("Mobile Token error");
+        })
+        .then((mobileToken: string) => {
+            return admin.messaging().sendToDevice(mobileToken, { data: data });
+        });
 }
 
 export const pairWithUID = functions.https.onCall(async (data, context) => {
-    if (context.auth) {
-        const webUID = data.webUID
-
-        // check if there is a user with the scanned uid
-        return admin.auth().getUser(webUID)
-            .then(async (_userRecord: admin.auth.UserRecord) => {
-                const customTokenPromise = createCustomToken(context.auth)
-                if (customTokenPromise) {
-                    const customToken = await customTokenPromise;
-                    const webToken = await getWebToken(webUID);
-
-                    return admin.messaging().sendToDevice(webToken.val(), { data: { customToken: customToken } })
-                }
-                return null;
-            })
-            .catch(err => {
-                console.log(err);
-                console.log("User not found for the scanned UID");
-                return null;
-            })
-    } else {
-        console.log("Auth error");
-        return null;
+    if (!context.auth || !data.webUID) {
+        return Promise.reject("Authentication error");
     }
+
+    // check if there is a user with the scanned uid
+    return admin.auth().getUser(data.webUID)
+        .then(async (_: admin.auth.UserRecord) => {
+            return Promise.all([createCustomToken(context.auth), getWebToken(data.webUID)])
+                .then((values: any[]) => {
+                    const customToken = values[0];
+                    const webToken = values[1];
+
+                    return admin.messaging().sendToDevice(webToken.val(), { data: { customToken: customToken } });
+                })
+        })
+        .catch(_ => {
+            return Promise.reject("User not found for the scanned UID");
+        });
 });
 
 export const syncLastMessages = functions.https.onCall(async (data, context) => {
@@ -74,8 +72,18 @@ export const syncContacts = functions.https.onCall(async (data, context) => {
 });
 
 export const syncConversation = functions.https.onCall(async (data, context) => {
-    if (data.thread) {
-        return sendSyncMessage(context.auth, { syncConversation: data.thread });
+    if (!data.thread) {
+        return Promise.reject("Thread id not provided");
     }
-    return null
+    return sendSyncMessage(context.auth, { syncConversation: data.thread });
+});
+
+export const sendSMSMessage = functions.https.onCall(async (data, context) => {
+    if (!data.phoneNumber) {
+        return Promise.reject("Phone number not provided");
+    }
+    if (!data.content) {
+        return Promise.reject("Message content not provided");
+    }
+    return sendSyncMessage(context.auth, { sendMessage: { phoneNumber: data.phoneNumber, content: data.content } });
 });

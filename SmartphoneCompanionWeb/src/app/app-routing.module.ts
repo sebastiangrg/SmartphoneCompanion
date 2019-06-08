@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { MainContainerComponent } from './main-container/main-container.component';
-import { AuthGuard } from './services/auth.guard';
-import { AnonGuard } from './services/anon.guard';
-import { SignInComponent } from './sign-in/sign-in.component';
-import { MessagesComponent } from './messages/messages.component';
+import { RouterModule, Routes } from '@angular/router';
 import { ContactsComponent } from './contacts/contacts.component';
+import { MainContainerComponent } from './main-container/main-container.component';
+import { MessagesComponent } from './messages/messages.component';
+import { AnonGuard } from './services/anon.guard';
+import { AuthGuard } from './services/auth.guard';
+import { SignInComponent } from './sign-in/sign-in.component';
 
 const routes: Routes = [
   {

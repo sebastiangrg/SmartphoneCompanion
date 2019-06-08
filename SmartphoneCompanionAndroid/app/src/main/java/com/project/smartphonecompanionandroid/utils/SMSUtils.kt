@@ -19,6 +19,11 @@ data class SMSMessage(
 )
 
 object SMSUtils : AnkoLogger {
+    fun syncAll(context: Context) {
+        syncLastMessages(context)
+        getLastMessages(context).forEach { syncConversation(context, it.thread) }
+    }
+
     fun syncLastMessages(context: Context) {
         info("Synchronizing last messages")
 
