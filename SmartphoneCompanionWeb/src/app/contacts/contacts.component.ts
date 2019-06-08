@@ -6,6 +6,7 @@ import { User } from 'firebase';
 import { Observable } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import { Contact } from '../model/Contact';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-contacts',
@@ -17,12 +18,15 @@ export class ContactsComponent implements OnInit {
   constructor(
     private syncService: SyncService,
     private databaseService: DatabaseService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) { }
 
   user: User;
   contacts$: Observable<Contact[]>;
   filter: string;
+  selectedContact: Contact;
+  draft: string;
 
   ngOnInit() {
     this.filter = '';
@@ -54,11 +58,23 @@ export class ContactsComponent implements OnInit {
     return phoneNumber && phoneNumber.match(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/);
   }
 
-  message(person: string | Contact) {
+  selectContact(person: string | Contact) {
     if (person instanceof Contact) {
-
+      this.selectedContact = person;
     } else {
+      this.selectedContact = new Contact(person, person);
+    }
+  }
 
+  closeModal() {
+    this.selectedContact = null;
+  }
+
+  sendMessage(phoneNumber: string): void {
+    if (this.draft.length) {
+      this.syncService.sendSMSMessage(phoneNumber, this.draft);
+      this.draft = '';
+      this.router.navigate(['messages']);
     }
   }
 }

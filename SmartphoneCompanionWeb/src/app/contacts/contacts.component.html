@@ -13,7 +13,7 @@
             <span class="h5"> {{ filter }}</span>
           </div>
           <div class="col-lg-2">
-            <span class="contact-icon text-center" (click)="message(filter)">
+            <span class="contact-icon text-center" (click)="selectContact(filter)">
               <img src="../../assets/message.svg">
             </span>
           </div>
@@ -30,7 +30,7 @@
                   <span class="float-right">{{ contact.phoneNumber }}</span>
                 </div>
                 <div class="col-lg-2">
-                  <span class="contact-icon text-center" (click)="message(contact)">
+                  <span class="contact-icon text-center" (click)="selectContact(contact)">
                     <img src="../../assets/message.svg">
                   </span>
                 </div>
@@ -42,6 +42,27 @@
     </ng-container>
   </div>
 </div>
+
+<ng-container *ngIf="selectedContact">
+  <div class="compose-modal">
+    <div class="modal-dialog">
+      <div class="modal-content bg-secondary">
+        <div class="modal-header">
+          <h5 class="modal-title text-light">{{ selectedContact.name }}</h5>
+          <span (click)="closeModal()" class="text-light clickable">&times;</span>
+        </div>
+        <div class="modal-body">
+          <textarea type="text" placeholder="Type your message here" [(ngModel)]="draft" maxlength="64"
+            class="col-lg-11 text-light text-right" rows="2"
+            (keyup.enter)="sendMessage(selectedContact.phoneNumber)"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="sendMessage(selectedContact.phoneNumber)">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
 
 <ng-template #loading>
   <div class="w-100 h-100 d-flex justify-content-center align-items-center">
