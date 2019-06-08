@@ -3,6 +3,7 @@ package com.project.smartphonecompanionandroid.utils
 import android.content.Context
 import android.database.Cursor
 import android.provider.Telephony
+import android.telephony.SmsManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import org.jetbrains.anko.AnkoLogger
@@ -19,7 +20,14 @@ data class SMSMessage(
 )
 
 object SMSUtils : AnkoLogger {
+    fun sendSMSMessage(context: Context, phoneNumber: String, content: String) {
+        info("Sending SMS to $phoneNumber with content $content")
+        val smsManager = SmsManager.getDefault() as SmsManager
+        smsManager.sendTextMessage(phoneNumber, null, content, null, null)
+    }
+
     fun syncAll(context: Context) {
+        info("SyncAll")
         syncLastMessages(context)
         getLastMessages(context).forEach { syncConversation(context, it.thread) }
     }

@@ -25,6 +25,7 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
   }
 
   user: User;
+  draft: string;
 
   contacts: Contact[];
 
@@ -34,6 +35,7 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
   selectedConversation: number;
 
   ngOnInit() {
+    this.draft = '';
     this.conversation$ = of([]);
     this.authService.getUser()
       .pipe(take(1))
@@ -48,7 +50,9 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
 
   ngAfterViewChecked() {
     const container = document.getElementById('conversation');
-    container.scrollTop = container.scrollHeight;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
   }
 
   private getLastMessages(): void {
@@ -98,5 +102,12 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
     this.selectedConversation = thread;
     this.syncService.syncConversation(thread);
     this.getConversation(thread);
+  }
+
+  sendMessage(phoneNumber: string): void {
+    if (this.draft.length) {
+      this.syncService.sendSMSMessage(phoneNumber, this.draft);
+      this.draft = '';
+    }
   }
 }

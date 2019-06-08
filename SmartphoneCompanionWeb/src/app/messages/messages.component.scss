@@ -34,3 +34,29 @@
     float: right;
   }
 }
+
+.compose {
+  height: 48px;
+  background-color: $secondaryLight;
+
+  .row {
+    input {
+      background: none;
+      border-style: none;
+      border-color: transparent;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+      outline: none;
+      line-height: 48px;
+    }
+
+    .send-button {
+      line-height: 48px;
+
+      img {
+        cursor: pointer;
+      }
+    }
+  }
+}

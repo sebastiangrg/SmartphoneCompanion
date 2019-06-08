@@ -16,7 +16,9 @@ import kotlinx.android.synthetic.main.fragment_active_sessions.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import android.content.Context
+import com.project.smartphonecompanionandroid.utils.ContactUtils
 import com.project.smartphonecompanionandroid.utils.FCMUtils
+import com.project.smartphonecompanionandroid.utils.SMSUtils
 import java.util.ArrayList
 
 
@@ -51,13 +53,16 @@ class ActiveSessionsFragment : Fragment(), AnkoLogger {
         requestSMSAndContactsPermissions()
 
         FCMUtils.saveMobileTokenToFirebase()
+        ContactUtils.syncContacts(requireContext())
+        SMSUtils.syncAll(requireContext())
     }
 
     private fun requestSMSAndContactsPermissions() {
         val permissions = arrayOf(
             Manifest.permission.READ_SMS,
             Manifest.permission.READ_CONTACTS,
-            Manifest.permission.RECEIVE_SMS
+            Manifest.permission.RECEIVE_SMS,
+            Manifest.permission.SEND_SMS
         )
 
         Permissions.check(requireContext(), permissions, null, null, object : PermissionHandler() {

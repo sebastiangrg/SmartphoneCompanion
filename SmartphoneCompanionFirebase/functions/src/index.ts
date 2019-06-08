@@ -63,19 +63,19 @@ export const pairWithUID = functions.https.onCall(async (data, context) => {
         });
 });
 
-export const syncLastMessages = functions.https.onCall(async (data, context) => {
-    return sendSyncMessage(context.auth, { syncLastMessages: "true" });
+export const syncLastMessages = functions.https.onCall(async (_, context) => {
+    return sendSyncMessage(context.auth, { operation: "SYNC_LAST_MESSAGES" });
 });
 
-export const syncContacts = functions.https.onCall(async (data, context) => {
-    return sendSyncMessage(context.auth, { syncContacts: "true" });
+export const syncContacts = functions.https.onCall(async (_, context) => {
+    return sendSyncMessage(context.auth, { operation: "SYNC_CONTACTS" });
 });
 
 export const syncConversation = functions.https.onCall(async (data, context) => {
     if (!data.thread) {
         return Promise.reject("Thread id not provided");
     }
-    return sendSyncMessage(context.auth, { syncConversation: data.thread });
+    return sendSyncMessage(context.auth, { operation: "SYNC_CONVERSATION", thread: data.thread.toString() });
 });
 
 export const sendSMSMessage = functions.https.onCall(async (data, context) => {
@@ -85,5 +85,5 @@ export const sendSMSMessage = functions.https.onCall(async (data, context) => {
     if (!data.content) {
         return Promise.reject("Message content not provided");
     }
-    return sendSyncMessage(context.auth, { sendMessage: { phoneNumber: data.phoneNumber, content: data.content } });
+    return sendSyncMessage(context.auth, { operation: "SEND_SMS", phoneNumber: data.phoneNumber, content: data.content });
 });

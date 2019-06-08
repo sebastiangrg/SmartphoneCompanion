@@ -16,8 +16,6 @@ import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.functions.FirebaseFunctionsException
-import com.project.smartphonecompanionandroid.utils.ContactUtils
-import com.project.smartphonecompanionandroid.utils.SMSUtils
 import com.project.smartphonecompanionandroid.utils.hasPermission
 import kotlinx.android.synthetic.main.fragment_qrcode_scanner.*
 import org.jetbrains.anko.AnkoLogger
@@ -140,8 +138,6 @@ class QRCodeScannerFragment : Fragment(), AnkoLogger {
                     }
                 } else {
                     info("Pair with UID completed successfully")
-                    ContactUtils.syncContacts(requireContext())
-                    SMSUtils.syncAll(requireContext())
                 }
             }
     }
