@@ -1,3 +1,52 @@
-<p>
-  contacts works!
-</p>
+<div class="row px-0">
+  <div class="contacts overflow-auto col-lg-12">
+    <ng-container *ngIf="contacts$ | async as contacts; else loading">
+      <!--Filter box-->
+      <div class="form-group col-lg-6 mx-auto">
+        <input type="text" class="form-control" [(ngModel)]="filter">
+      </div>
+      <!--Typed number-->
+      <div class="contact bg-primary col-lg-5 mx-auto my-4 p-3 rounded text-secondary"
+        *ngIf="isValidPhoneNumber(filter)">
+        <div class="row">
+          <div class="col-lg-10 text-center">
+            <span class="h5"> {{ filter }}</span>
+          </div>
+          <div class="col-lg-2">
+            <span class="contact-icon text-center" (click)="message(filter)">
+              <img src="../../assets/message.svg">
+            </span>
+          </div>
+        </div>
+      </div>
+      <!--Contacts-->
+      <div class="col-lg-10 mx-auto">
+        <div class="row">
+          <ng-container *ngFor="let contact of filterContacts(contacts)">
+            <div class="contact col-lg-5 my-1 p-3 mx-auto rounded text-light">
+              <div class="row">
+                <div class="col-lg-10">
+                  <span class="h6">{{ contact.name }}</span>
+                  <span class="float-right">{{ contact.phoneNumber }}</span>
+                </div>
+                <div class="col-lg-2">
+                  <span class="contact-icon text-center" (click)="message(contact)">
+                    <img src="../../assets/message.svg">
+                  </span>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <div class="spinner-grow text-primary">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+</ng-template>

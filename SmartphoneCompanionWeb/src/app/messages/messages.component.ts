@@ -7,6 +7,7 @@ import { AuthService } from '../services/auth.service';
 import { User } from 'firebase';
 import Utils from '../utils';
 import { Observable } from 'rxjs';
+import { Contact } from '../model/Contact';
 
 @Component({
   selector: 'app-messages',
@@ -20,13 +21,12 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
     private databaseService: DatabaseService,
     private authService: AuthService
   ) {
-    this.contactNames = new Map<string, string>();
     this.selectedConversation = -1;
   }
 
   user: User;
 
-  contactNames: Map<string, string>;
+  contacts: Contact[];
 
   lastMessages$: Observable<SMSMessage[]>;
 
@@ -68,8 +68,8 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
 
   private getContacts(): void {
     this.databaseService.getContacts(this.user.uid)
-      .subscribe((contacts: Map<string, string>) => {
-        this.contactNames = contacts;
+      .subscribe((contacts: Contact[]) => {
+        this.contacts = contacts;
       });
   }
 
@@ -84,16 +84,18 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
 
   getContactName(phoneNumber: string): string {
     const cleanedPhoneNumber = Utils.cleanPhoneNumber(phoneNumber);
-    if (this.contactNames.has(cleanedPhoneNumber)) {
-      return this.contactNames.get(cleanedPhoneNumber);
+    const contactIndex = this.contacts.findIndex(c => c.phoneNumber === cleanedPhoneNumber);
+    if (contactIndex > -1) {
+      return this.contacts[contactIndex].name;
     }
     return phoneNumber;
   }
 
   getInitial(phoneNumber: string): string {
     const cleanedPhoneNumber = Utils.cleanPhoneNumber(phoneNumber);
-    if (this.contactNames.has(cleanedPhoneNumber)) {
-      return this.contactNames.get(cleanedPhoneNumber).substr(0, 1);
+    const contactIndex = this.contacts.findIndex(c => c.phoneNumber === cleanedPhoneNumber);
+    if (contactIndex > -1) {
+      return this.contacts[contactIndex].name.substr(0, 1);
     }
     return '#';
   }
