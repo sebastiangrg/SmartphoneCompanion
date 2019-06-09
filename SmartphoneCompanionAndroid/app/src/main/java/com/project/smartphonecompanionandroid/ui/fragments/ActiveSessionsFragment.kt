@@ -1,25 +1,23 @@
 package com.project.smartphonecompanionandroid.ui.fragments
 
 import android.Manifest
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
-
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.nabinbhandari.android.permissions.PermissionHandler
 import com.nabinbhandari.android.permissions.Permissions
 import com.project.smartphonecompanionandroid.R
+import com.project.smartphonecompanionandroid.utils.FCMUtils
+import com.project.smartphonecompanionandroid.utils.SyncUtils
 import com.project.smartphonecompanionandroid.utils.replaceFragment
 import kotlinx.android.synthetic.main.fragment_active_sessions.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
-import android.content.Context
-import com.project.smartphonecompanionandroid.utils.ContactUtils
-import com.project.smartphonecompanionandroid.utils.FCMUtils
-import com.project.smartphonecompanionandroid.utils.SMSUtils
-import java.util.ArrayList
+import java.util.*
 
 
 class ActiveSessionsFragment : Fragment(), AnkoLogger {
@@ -53,8 +51,9 @@ class ActiveSessionsFragment : Fragment(), AnkoLogger {
         requestSMSAndContactsPermissions()
 
         FCMUtils.saveMobileTokenToFirebase()
-        ContactUtils.syncContacts(requireContext())
-        SMSUtils.syncAll(requireContext())
+
+        SyncUtils.startWorker(mapOf("operation" to SyncUtils.SYNC_CONTACTS))
+        SyncUtils.startWorker(mapOf("operation" to SyncUtils.SYNC_ALL))
     }
 
     private fun requestSMSAndContactsPermissions() {
