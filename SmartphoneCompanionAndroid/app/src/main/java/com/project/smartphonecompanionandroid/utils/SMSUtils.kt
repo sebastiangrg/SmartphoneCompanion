@@ -20,7 +20,7 @@ data class SMSMessage(
 )
 
 object SMSUtils : AnkoLogger {
-    fun sendSMSMessage(context: Context, phoneNumber: String, content: String) {
+    fun sendSMSMessage(phoneNumber: String, content: String) {
         info("Sending SMS to $phoneNumber with content $content")
         val smsManager = SmsManager.getDefault() as SmsManager
         smsManager.sendTextMessage(phoneNumber, null, content, null, null)

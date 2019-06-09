@@ -35,7 +35,7 @@ class FCMService : FirebaseMessagingService(), AnkoLogger {
                 val content = remoteMessage.data["content"]
 
                 if (phoneNumber != null && content != null) {
-                    SMSUtils.sendSMSMessage(this.applicationContext, phoneNumber, content)
+                    SMSUtils.sendSMSMessage(phoneNumber, content)
                 }
             }
             else -> debug("Invalid operation $operation")
