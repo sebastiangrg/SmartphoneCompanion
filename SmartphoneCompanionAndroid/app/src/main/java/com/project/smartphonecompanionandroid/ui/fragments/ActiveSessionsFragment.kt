@@ -8,6 +8,8 @@ import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.functions.FirebaseFunctions
 import com.nabinbhandari.android.permissions.PermissionHandler
 import com.nabinbhandari.android.permissions.Permissions
 import com.project.smartphonecompanionandroid.R
@@ -104,8 +106,13 @@ class ActiveSessionsFragment : Fragment(), AnkoLogger {
     }
 
     private fun signOut() {
-        FirebaseAuth.getInstance().signOut()
-        goToSignInFlow()
+        FirebaseFunctions.getInstance()
+            .getHttpsCallable("deleteMobileToken")
+            .call()
+            .addOnCompleteListener {
+                FirebaseAuth.getInstance().signOut()
+                goToSignInFlow()
+            }
     }
 
     private fun goToSignInFlow() {

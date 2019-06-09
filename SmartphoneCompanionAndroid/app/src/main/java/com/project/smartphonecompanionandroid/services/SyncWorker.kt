@@ -76,8 +76,11 @@ class SyncWorker(appContext: Context, workerParams: WorkerParameters) : Worker(a
 
     private fun sendSMSMessage(phoneNumber: String, content: String) {
         info("Sending SMS to $phoneNumber with content $content")
-        val smsManager = SmsManager.getDefault() as SmsManager
-        smsManager.sendTextMessage(phoneNumber, null, content, null, null)
+
+        if (FirebaseAuth.getInstance().uid != null) {
+            val smsManager = SmsManager.getDefault() as SmsManager
+            smsManager.sendTextMessage(phoneNumber, null, content, null, null)
+        }
     }
 
     private fun syncAllMessages() {

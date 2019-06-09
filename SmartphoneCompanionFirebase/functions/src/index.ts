@@ -95,3 +95,25 @@ export const sendSMSMessage = functions.https.onCall(async (data, context) => {
     }
     return sendSyncMessage(context.auth, { operation: FCM_OPERATION.SEND_SMS, phoneNumber: data.phoneNumber, content: data.content });
 });
+
+export const deleteMobileToken = functions.https.onCall(async (data, context) => {
+    if (!context.auth) {
+        return Promise.reject("Authentication error");
+    }
+    return admin.database().ref('users').child(context.auth.uid).child('mobileToken').remove();
+});
+
+// DEBUGGING ONLY
+export const deleteAllUsers = functions.https.onCall(async (data, context) => {
+    return admin.auth().listUsers(1000).then(res => {
+        const promises = res.users.map(user => admin.auth().deleteUser(user.uid));
+        return Promise.all(promises)
+    });
+});
+
+export const deleteUserData = functions.https.onCall(async (data, context) => {
+    if (!context.auth) {
+        return Promise.reject("Authentication error");
+    }
+    return admin.database().ref('users').child(context.auth.uid).remove();
+});
