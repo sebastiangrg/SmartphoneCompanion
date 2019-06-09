@@ -19,13 +19,8 @@ class SMSBroadcastReceiver : BroadcastReceiver(), AnkoLogger {
                 Telephony.Sms.Intents.getMessagesFromIntent(intent).forEach {
                     info("SMS from ${it.displayOriginatingAddress} - content: ${it.messageBody}")
 
-                    SyncUtils.startWorker(mapOf("operation" to SyncUtils.SYNC_LAST_MESSAGES), 2000)
-                    SyncUtils.startWorker(
-                        mapOf(
-                            "operation" to SyncUtils.SYNC_CONVERSATIONS_SINCE,
-                            "time" to it.timestampMillis.toString()
-                        ), 2000
-                    )
+                    SyncUtils.syncLastMessages()
+                    SyncUtils.syncConversationsSince(it.timestampMillis)
                 }
             }
             else -> debug("Unrecognised intent action ${intent.action}")

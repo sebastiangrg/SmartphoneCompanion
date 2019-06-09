@@ -52,8 +52,8 @@ class ActiveSessionsFragment : Fragment(), AnkoLogger {
 
         FCMUtils.saveMobileTokenToFirebase()
 
-        SyncUtils.startWorker(mapOf("operation" to SyncUtils.SYNC_CONTACTS))
-        SyncUtils.startWorker(mapOf("operation" to SyncUtils.SYNC_ALL))
+        SyncUtils.syncContacts()
+        SyncUtils.syncAllMessages()
     }
 
     private fun requestSMSAndContactsPermissions() {
