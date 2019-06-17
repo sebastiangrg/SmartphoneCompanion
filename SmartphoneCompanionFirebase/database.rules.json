@@ -3,7 +3,15 @@
     "users": {
       "$user_id": {
         ".write": "$user_id === auth.uid",
-        ".read": "$user_id === auth.uid"
+        ".read": "$user_id === auth.uid",
+        "callLog": {
+          ".indexOn": "datetime/time"
+        },
+        "messages": {
+          "$thread_id": {
+            ".indexOn": "datetime/time"
+          }
+        }
       }
     }
   }
