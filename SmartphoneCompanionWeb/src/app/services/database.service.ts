@@ -70,6 +70,7 @@ export class DatabaseService {
   }
 
   public getConversation(uid: string, thread: number): AngularFireList<SMSMessage> {
-    return this.afDatabase.list<SMSMessage>('users/' + uid + '/messages/' + thread);
+    return this.afDatabase.list<SMSMessage>('users/' + uid + '/messages/' + thread,
+      ref => ref.orderByChild('datetime/time').limitToLast(50));
   }
 }

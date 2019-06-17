@@ -44,7 +44,7 @@ export class CallLogComponent implements OnInit {
     this.calls$ = this.databaseService.getCallLog(this.user.uid)
       .pipe(
         map((calls: Call[]) => {
-          return calls.sort((a: Call, b: Call) => a.datetime.time < b.datetime.time ? 1 : -1);
+          return calls.reverse();
         }));
   }
 

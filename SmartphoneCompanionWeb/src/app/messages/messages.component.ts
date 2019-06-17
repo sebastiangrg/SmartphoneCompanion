@@ -75,7 +75,7 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
     this.conversation$ = this.databaseService.getConversation(this.user.uid, thread).valueChanges()
       .pipe(
         map((conversation: SMSMessage[]) => {
-          return conversation.sort((a, b) => a.datetime.time - b.datetime.time);
+          return conversation;
         }),
       );
   }
