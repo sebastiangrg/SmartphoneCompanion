@@ -5,19 +5,21 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.project.smartphonecompanionandroid.services.SyncWorker
 import org.jetbrains.anko.AnkoLogger
-import java.sql.Timestamp
 import java.util.concurrent.TimeUnit
 
 object SyncUtils : AnkoLogger {
     private const val SMS_SYNC_DELAY_MILLIS = 1000L
 
-    data class SMSMessage(
-        val content: String,
-        val phoneNumber: String,
-        val datetime: Timestamp,
-        val thread: Long,
-        val isSender: Boolean
-    )
+    fun syncCallLog() {
+        val data = Data.Builder()
+        data.putInt("operation", SyncWorker.OPERATION_SYNC_CALL_LOG)
+
+        val work = OneTimeWorkRequest.Builder(SyncWorker::class.java)
+            .setInputData(data.build())
+            .build()
+
+        WorkManager.getInstance().enqueue(work)
+    }
 
     fun syncLastMessages() {
         val data = Data.Builder()

@@ -6,6 +6,7 @@ import { MessagesComponent } from './messages/messages.component';
 import { AnonGuard } from './services/anon.guard';
 import { AuthGuard } from './services/auth.guard';
 import { SignInComponent } from './sign-in/sign-in.component';
+import { CallLogComponent } from './call-log/call-log.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,10 @@ const routes: Routes = [
       {
         path: 'contacts',
         component: ContactsComponent
+      },
+      {
+        path: 'callLog',
+        component: CallLogComponent
       },
       {
         path: '',

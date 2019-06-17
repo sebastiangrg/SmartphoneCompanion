@@ -7,9 +7,9 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.project.smartphonecompanionandroid.utils.CallLogUtils
 import com.project.smartphonecompanionandroid.utils.ContactUtils
 import com.project.smartphonecompanionandroid.utils.SMSUtils
-import com.project.smartphonecompanionandroid.utils.SyncUtils.SMSMessage
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import org.jetbrains.anko.info
@@ -25,6 +25,7 @@ class SyncWorker(appContext: Context, workerParams: WorkerParameters) : Worker(a
         const val OPERATION_SEND_SMS = 4
         const val OPERATION_SYNC_ALL_MESSAGES = 5
         const val OPERATION_SYNC_CONVERSATIONS_SINCE = 6
+        const val OPERATION_SYNC_CALL_LOG = 7
     }
 
     override fun doWork(): Result {
@@ -48,10 +49,38 @@ class SyncWorker(appContext: Context, workerParams: WorkerParameters) : Worker(a
                 val time = inputData.getLong("time", -1)
                 syncConversationsSince(time)
             }
+            OPERATION_SYNC_CALL_LOG -> syncCallLog()
             else -> debug("Invalid operation $operation")
         }
 
         return Result.success()
+    }
+
+    private fun syncCallLog() {
+        info("Synchronizing call log")
+
+        val callLog = CallLogUtils.getCallLog(applicationContext)
+        val callLogMap = HashMap<String, CallLogUtils.CallLogEntry>()
+
+        callLog.forEach {
+            info("Message: $it")
+            callLogMap[it.hashCode().toString()] = it
+        }
+
+        val firebaseDatabase = FirebaseDatabase.getInstance()
+        val uid = FirebaseAuth.getInstance().uid
+
+        if (uid != null) {
+            info("Firebase UID: $uid")
+            firebaseDatabase.reference
+                .child("users")
+                .child(uid)
+                .child("callLog")
+                .updateChildren(callLogMap as Map<String, Any>)
+                .addOnFailureListener { warn("Synchronizing call log to Firebase failed") }
+                .addOnCanceledListener { warn("Synchronizing call log to Firebase canceled") }
+                .addOnCompleteListener { info("Done synchronizing call log") }
+        }
     }
 
     @SuppressLint("UseSparseArrays")
@@ -59,7 +88,7 @@ class SyncWorker(appContext: Context, workerParams: WorkerParameters) : Worker(a
         info("Synchronizing conversations since $time")
 
         val messages = SMSUtils.getMessagesSince(applicationContext, time)
-        val threadToMessageList = HashMap<Long, ArrayList<SMSMessage>>()
+        val threadToMessageList = HashMap<Long, ArrayList<SMSUtils.SMSMessage>>()
 
         messages.forEach { m ->
             if (threadToMessageList.containsKey(m.thread)) {
@@ -93,7 +122,7 @@ class SyncWorker(appContext: Context, workerParams: WorkerParameters) : Worker(a
         info("Synchronizing last messages")
 
         val lastMessages = SMSUtils.getLastMessages(applicationContext)
-        val lastMessagesMap = HashMap<String, SMSMessage>()
+        val lastMessagesMap = HashMap<String, SMSUtils.SMSMessage>()
 
         lastMessages.forEach {
             info("Message: $it")
@@ -127,8 +156,8 @@ class SyncWorker(appContext: Context, workerParams: WorkerParameters) : Worker(a
         syncThreadMessages(messages, thread)
     }
 
-    private fun syncThreadMessages(messages: List<SMSMessage>, thread: Long) {
-        val messagesMap = HashMap<String, SMSMessage>()
+    private fun syncThreadMessages(messages: List<SMSUtils.SMSMessage>, thread: Long) {
+        val messagesMap = HashMap<String, SMSUtils.SMSMessage>()
 
         messages.forEach {
             info("Message: $it")

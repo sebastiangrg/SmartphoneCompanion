@@ -6,7 +6,8 @@ const FCM_OPERATION = {
     SYNC_LAST_MESSAGES: "1",
     SYNC_CONVERSATION: "2",
     SYNC_CONTACTS: "3",
-    SEND_SMS: "4"
+    SEND_SMS: "4",
+    SYNC_CALL_LOG: "5"
 };
 
 admin.initializeApp();
@@ -78,6 +79,10 @@ export const syncLastMessages = functions.https.onCall(async (_, context) => {
 export const syncContacts = functions.https.onCall(async (_, context) => {
     return sendSyncMessage(context.auth, { operation: FCM_OPERATION.SYNC_CONTACTS });
 });
+
+export const syncCallLog = functions.https.onCall(async (_, context) => {
+    return sendSyncMessage(context.auth, { operation: FCM_OPERATION.SYNC_CALL_LOG })
+})
 
 export const syncConversation = functions.https.onCall(async (data, context) => {
     if (!data.thread) {

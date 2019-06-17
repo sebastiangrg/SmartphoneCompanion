@@ -7,8 +7,15 @@ import org.jetbrains.anko.AnkoLogger
 import java.sql.Timestamp
 
 object SMSUtils : AnkoLogger {
+    data class SMSMessage(
+        val content: String,
+        val phoneNumber: String,
+        val datetime: Timestamp,
+        val thread: Long,
+        val isSender: Boolean
+    )
 
-    fun getMessagesSince(context: Context, timeMillis: Long): List<SyncUtils.SMSMessage> {
+    fun getMessagesSince(context: Context, timeMillis: Long): List<SMSMessage> {
         val cr = context.contentResolver
 
         val sent = cr.query(
@@ -34,8 +41,8 @@ object SMSUtils : AnkoLogger {
     }
 
 
-    fun getLastMessages(context: Context): List<SyncUtils.SMSMessage> {
-        val list = ArrayList<SyncUtils.SMSMessage>()
+    fun getLastMessages(context: Context): List<SMSMessage> {
+        val list = ArrayList<SMSMessage>()
         val cr = context.contentResolver
 
         val sent = cr.query(
@@ -74,7 +81,7 @@ object SMSUtils : AnkoLogger {
         return list.sortedByDescending { it.datetime }
     }
 
-    fun getSentForThread(context: Context, thread: Long): List<SyncUtils.SMSMessage> {
+    fun getSentForThread(context: Context, thread: Long): List<SMSMessage> {
         val cr = context.contentResolver
 
         val sent = cr.query(
@@ -88,7 +95,7 @@ object SMSUtils : AnkoLogger {
         return if (sent != null) parseSMSMessages(sent, true) else ArrayList()
     }
 
-    fun getReceivedForThread(context: Context, thread: Long): List<SyncUtils.SMSMessage> {
+    fun getReceivedForThread(context: Context, thread: Long): List<SMSMessage> {
         val cr = context.contentResolver
 
         val received = cr.query(
@@ -102,8 +109,8 @@ object SMSUtils : AnkoLogger {
         return if (received != null) parseSMSMessages(received, false) else ArrayList()
     }
 
-    private fun parseSMSMessages(cursor: Cursor, isSender: Boolean): List<SyncUtils.SMSMessage> {
-        val list = ArrayList<SyncUtils.SMSMessage>()
+    private fun parseSMSMessages(cursor: Cursor, isSender: Boolean): List<SMSMessage> {
+        val list = ArrayList<SMSMessage>()
 
         cursor.use {
             val address = it.getColumnIndex(Telephony.Sms.ADDRESS)
@@ -115,7 +122,7 @@ object SMSUtils : AnkoLogger {
                 it.moveToNext()
                 try {
                     list.add(
-                        SyncUtils.SMSMessage(
+                        SMSMessage(
                             it.getString(body),
                             it.getString(address),
                             Timestamp(it.getLong(date)),

@@ -14,6 +14,7 @@ import { ContactsComponent } from './contacts/contacts.component';
 import { MainContainerComponent } from './main-container/main-container.component';
 import { MessagesComponent } from './messages/messages.component';
 import { SignInComponent } from './sign-in/sign-in.component';
+import { CallLogComponent } from './call-log/call-log.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { SignInComponent } from './sign-in/sign-in.component';
     MainContainerComponent,
     SignInComponent,
     MessagesComponent,
-    ContactsComponent
+    ContactsComponent,
+    CallLogComponent
   ],
   imports: [
     BrowserModule,

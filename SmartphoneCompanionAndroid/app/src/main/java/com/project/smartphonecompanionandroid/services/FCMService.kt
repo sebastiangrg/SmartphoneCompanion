@@ -14,6 +14,7 @@ class FCMService : FirebaseMessagingService(), AnkoLogger {
         const val FCM_OPERATION_SYNC_CONVERSATION = "2"
         const val FCM_OPERATION_SYNC_CONTACTS = "3"
         const val FCM_OPERATION_SEND_SMS = "4"
+        const val FCM_OPERATION_SYNC_CALL_LOG = "5"
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -37,6 +38,7 @@ class FCMService : FirebaseMessagingService(), AnkoLogger {
                     SyncUtils.sendSMSMessage(phoneNumber, content)
                 }
             }
+            FCM_OPERATION_SYNC_CALL_LOG -> SyncUtils.syncCallLog()
             else -> debug("Invalid operation $operation")
         }
     }

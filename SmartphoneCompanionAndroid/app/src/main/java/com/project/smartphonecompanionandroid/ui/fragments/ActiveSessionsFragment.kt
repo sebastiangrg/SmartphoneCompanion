@@ -8,7 +8,6 @@ import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.functions.FirebaseFunctions
 import com.nabinbhandari.android.permissions.PermissionHandler
 import com.nabinbhandari.android.permissions.Permissions
@@ -47,10 +46,10 @@ class ActiveSessionsFragment : Fragment(), AnkoLogger {
         addButton.setOnClickListener { addSession() }
 
         intro7cardView.setOnClickListener {
-            requestSMSAndContactsPermissions()
+            requestSyncPermissions()
         }
 
-        requestSMSAndContactsPermissions()
+        requestSyncPermissions()
 
         FCMUtils.saveMobileTokenToFirebase()
 
@@ -58,12 +57,13 @@ class ActiveSessionsFragment : Fragment(), AnkoLogger {
         SyncUtils.syncAllMessages()
     }
 
-    private fun requestSMSAndContactsPermissions() {
+    private fun requestSyncPermissions() {
         val permissions = arrayOf(
             Manifest.permission.READ_SMS,
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.RECEIVE_SMS,
-            Manifest.permission.SEND_SMS
+            Manifest.permission.SEND_SMS,
+            Manifest.permission.READ_CALL_LOG
         )
 
         Permissions.check(requireContext(), permissions, null, null, object : PermissionHandler() {

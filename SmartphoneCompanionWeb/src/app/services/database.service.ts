@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import Utils from '../utils';
 import { Contact } from '../model/Contact';
+import { Call } from '../model/Call';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,28 @@ export class DatabaseService {
 
   public getLastMessages(uid: string): AngularFireList<SMSMessage> {
     return this.afDatabase.list<SMSMessage>('users/' + uid + '/lastMessages');
+  }
+
+  public getCallLog(uid: string): Observable<Call[]> {
+    return this.afDatabase.list<object>('users/' + uid + '/callLog', ref => ref.orderByChild('datetime/time').limitToLast(50))
+      .valueChanges()
+      .pipe(
+        map((res: any[]) => {
+          const calls = new Array<Call>();
+          if (res) {
+            res.forEach((c: any) => {
+              const call = new Call();
+              call.phoneNumber = Utils.cleanPhoneNumber(c.phoneNumber);
+              call.duration = c.duration;
+              call.datetime = c.datetime;
+              call.type = c.type;
+
+              calls.push(call);
+            });
+          }
+          return calls;
+        })
+      );
   }
 
   public getContacts(uid: string): Observable<Contact[]> {

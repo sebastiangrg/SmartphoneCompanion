@@ -27,6 +27,12 @@ export class SyncService {
     return callable({});
   }
 
+  public syncCallLog(): Observable<any> {
+    const callable = this.afFunctions.httpsCallable('syncCallLog');
+
+    return callable({});
+  }
+
   public sendSMSMessage(phoneNumber: string, content: string) {
     if (!this.isMessageValid(content)) {
       return of(null);

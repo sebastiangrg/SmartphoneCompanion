@@ -1,0 +1,37 @@
+<div class="row px-0">
+  <div class="contacts overflow-auto col-lg-12">
+    <ng-container *ngIf="calls$ | async as calls; else loading">
+      <div class="col-lg-8 mx-auto">
+        <div class="row">
+          <ng-container *ngFor="let call of calls">
+            <div class="call col-lg-12 my-1 p-2 mx-auto rounded text-light">
+              <div class="row">
+                <div class="col-lg-1 pt-2 text-right">
+                  <span class="contact-icon text-center">
+                    {{ getInitial(call.phoneNumber) }}
+                  </span>
+                </div>
+                <span class="col-lg-4 pt-2 text-light h5">{{ getContactName(call.phoneNumber) }}</span>
+                <span class="col-lg-2 pt-2 text-light h6">
+                  {{ hasContact(call.phoneNumber) ? call.phoneNumber : "" }}
+                </span>
+                <span class="col-lg-2 pt-2 text-light text-center small"> {{ call.type }}</span>
+                <span class="col-lg-3 pt-2 pr-4 text-light text-right">
+                  {{ call.datetime.time | date: 'dd MMM yy HH:mm' }}
+                </span>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <div class="spinner-grow text-primary">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+</ng-template>
