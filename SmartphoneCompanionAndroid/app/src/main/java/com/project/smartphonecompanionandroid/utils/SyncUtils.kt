@@ -79,6 +79,19 @@ object SyncUtils : AnkoLogger {
         WorkManager.getInstance().enqueue(work)
     }
 
+    fun sendNewMessageNotification(phoneNumber: String, content: String) {
+        val data = Data.Builder()
+        data.putInt("operation", SyncWorker.OPERATION_SEND_NEW_MESSAGE_NOTIFICATION)
+        data.putString("phoneNumber", phoneNumber)
+        data.putString("content", content)
+
+        val work = OneTimeWorkRequest.Builder(SyncWorker::class.java)
+            .setInputData(data.build())
+            .build()
+
+        WorkManager.getInstance().enqueue(work)
+    }
+
     fun sendSMSMessage(phoneNumber: String, content: String) {
         // sending an sms
         val smsData = Data.Builder()

@@ -19,6 +19,7 @@ class SMSBroadcastReceiver : BroadcastReceiver(), AnkoLogger {
                 Telephony.Sms.Intents.getMessagesFromIntent(intent).forEach {
                     info("SMS from ${it.displayOriginatingAddress} - content: ${it.messageBody}")
 
+                    SyncUtils.sendNewMessageNotification(it.displayOriginatingAddress,it.messageBody)
                     SyncUtils.syncLastMessages()
                     SyncUtils.syncConversationsSince(it.timestampMillis)
                 }

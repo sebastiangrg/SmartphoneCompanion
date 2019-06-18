@@ -11,16 +11,18 @@ const messaging = firebase.messaging();
 messaging.setBackgroundMessageHandler(function (payload) {
   console.log('Received background message ', payload);
 
-  var notificationTitle = 'Smartphone Companion';
-  var notificationOptions = {
-    body: payload.data,
-    icon: '/firebase-logo.png'
-  };
-
   // do not show a notification in case the message is the custom token used to sign in
   if (payload.data.customToken) {
     return null;
   }
+
+  const message = "Received new SMS from " + payload.data.phoneNumber + ": " + payload.data.content
+
+  var notificationTitle = 'Smartphone Companion';
+  var notificationOptions = {
+    body: message,
+    icon: 'assets/logo.png'
+  };
 
   return self.registration.showNotification(notificationTitle,
     notificationOptions);

@@ -7,6 +7,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.functions.FirebaseFunctions
 import com.project.smartphonecompanionandroid.utils.CallLogUtils
 import com.project.smartphonecompanionandroid.utils.ContactUtils
 import com.project.smartphonecompanionandroid.utils.SMSUtils
@@ -26,6 +27,7 @@ class SyncWorker(appContext: Context, workerParams: WorkerParameters) : Worker(a
         const val OPERATION_SYNC_ALL_MESSAGES = 5
         const val OPERATION_SYNC_CONVERSATIONS_SINCE = 6
         const val OPERATION_SYNC_CALL_LOG = 7
+        const val OPERATION_SEND_NEW_MESSAGE_NOTIFICATION = 8
     }
 
     override fun doWork(): Result {
@@ -50,10 +52,30 @@ class SyncWorker(appContext: Context, workerParams: WorkerParameters) : Worker(a
                 syncConversationsSince(time)
             }
             OPERATION_SYNC_CALL_LOG -> syncCallLog()
+            OPERATION_SEND_NEW_MESSAGE_NOTIFICATION -> {
+                val phoneNumber = inputData.getString("phoneNumber")
+                val content = inputData.getString("content")
+
+                if (phoneNumber != null && content != null) {
+                    sendNewMessageNotification(phoneNumber, content)
+                }
+            }
             else -> debug("Invalid operation $operation")
         }
 
         return Result.success()
+    }
+
+    private fun sendNewMessageNotification(phoneNumber: String, content: String) {
+        info("Sending new SMS notification")
+
+        val data = hashMapOf(
+            "phoneNumber" to phoneNumber,
+            "content" to content
+        )
+
+        FirebaseFunctions.getInstance().getHttpsCallable("sendNewMessageNotification")
+            .call(data)
     }
 
     private fun syncCallLog() {

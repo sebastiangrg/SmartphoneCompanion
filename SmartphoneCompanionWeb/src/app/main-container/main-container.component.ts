@@ -29,7 +29,7 @@ export class MainContainerComponent implements OnInit {
 
   private initUser() {
     // retrieve the user and if he is authenticated, save the webToken and subscribe to messages
-    this.data$ = this.authService.getUser()
+    this.authService.getUser()
       .pipe(
         tap((user: User) => {
           this.user = user;
@@ -38,7 +38,9 @@ export class MainContainerComponent implements OnInit {
           } else {
             this.fcmService.saveWebToken(user.uid);
           }
-        }));
+        }),
+        take(1))
+      .subscribe();
   }
 
   syncLastMessages() {
@@ -71,7 +73,7 @@ export class MainContainerComponent implements OnInit {
       )
       .subscribe(
         (res: any) => {
-          //console.log(res);
+          // console.log(res);
         });
   }
 

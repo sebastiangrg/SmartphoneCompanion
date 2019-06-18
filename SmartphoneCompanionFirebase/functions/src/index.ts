@@ -108,6 +108,22 @@ export const deleteMobileToken = functions.https.onCall(async (data, context) =>
     return admin.database().ref('users').child(context.auth.uid).child('mobileToken').remove();
 });
 
+export const sendNewMessageNotification = functions.https.onCall(async (data, context) => {
+    if (!context.auth) {
+        return Promise.reject("Authentication error")
+    }
+    return getWebToken(context.auth.uid)
+        .then(webToken => {
+            if (!data.content || !data.phoneNumber) {
+                return Promise.reject("Message content or phone number missing")
+            }
+            return admin.messaging().sendToDevice(webToken.val(), { data: { content: data.content, phoneNumber: data.phoneNumber } });
+        })
+        .catch(_ => {
+            return Promise.reject("Web Token error")
+        })
+})
+
 // DEBUGGING ONLY
 export const deleteAllUsers = functions.https.onCall(async (data, context) => {
     return admin.auth().listUsers(1000).then(res => {
