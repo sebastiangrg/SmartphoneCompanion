@@ -19,7 +19,6 @@ export class MainContainerComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private fcmService: FCMService,
-    private syncService: SyncService,
     private router: Router
   ) { }
 
@@ -41,40 +40,6 @@ export class MainContainerComponent implements OnInit {
         }),
         take(1))
       .subscribe();
-  }
-
-  syncLastMessages() {
-    this.syncService.syncLastMessages()
-      .pipe(
-        take(1)
-      )
-      .subscribe(
-        (res: any) => {
-          console.log(res);
-        });
-  }
-
-  syncContacts() {
-    this.syncService.syncContacts()
-      .pipe(
-        take(1)
-      )
-      .subscribe(
-        (res: any) => {
-          console.log(res);
-        });
-  }
-
-  syncConversation() {
-    const thread = 258;
-    this.syncService.syncConversation(thread)
-      .pipe(
-        take(1)
-      )
-      .subscribe(
-        (res: any) => {
-          // console.log(res);
-        });
   }
 
   signOut() {
