@@ -21,7 +21,7 @@ class SMSBroadcastReceiver : BroadcastReceiver(), AnkoLogger {
 
                     SyncUtils.sendNewMessageNotification(it.displayOriginatingAddress,it.messageBody)
                     SyncUtils.syncLastMessages()
-                    SyncUtils.syncConversationsSince(it.timestampMillis)
+                    SyncUtils.syncConversationsSince(it.timestampMillis - 4000)
                 }
             }
             else -> debug("Unrecognised intent action ${intent.action}")

@@ -31,7 +31,7 @@
 
     <!--Active Sessions-->
     <string name="intro_5_placeholder">You are signed in as &lt;b>%1$s&lt;/b></string>
-    <string name="intro_6">Visit <u>smartphone-companion.firebaseapp.com</u> on your
+    <string name="intro_6">Visit <u>smartphone-companion.web.app</u> on your
         computer in order to pair your device and use the app.
     </string>
     <string name="camera_permission_rationale">In order to scan the QR Code and pair your device to your computer, we

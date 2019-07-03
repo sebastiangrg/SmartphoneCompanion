@@ -78,4 +78,11 @@ export class CallLogComponent implements OnInit {
     const contactIndex = this.contacts.findIndex(c => c.phoneNumber === cleanedPhoneNumber);
     return contactIndex > -1;
   }
+
+  parseTime(seconds: number): string {
+    const minutesString = seconds > 60 ? Math.floor(seconds / 60).toString() + 'm' : '';
+    const secondsString = seconds % 60 + 's';
+
+    return minutesString + ' ' + secondsString;
+  }
 }

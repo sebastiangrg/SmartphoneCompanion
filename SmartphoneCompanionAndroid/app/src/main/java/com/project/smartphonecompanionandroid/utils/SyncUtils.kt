@@ -8,7 +8,7 @@ import org.jetbrains.anko.AnkoLogger
 import java.util.concurrent.TimeUnit
 
 object SyncUtils : AnkoLogger {
-    private const val SMS_SYNC_DELAY_MILLIS = 1000L
+    private const val SMS_SYNC_DELAY_MILLIS = 4000L
 
     fun syncCallLog() {
         val data = Data.Builder()

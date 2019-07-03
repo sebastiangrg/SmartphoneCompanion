@@ -11,12 +11,13 @@
                     {{ getInitial(call.phoneNumber) }}
                   </span>
                 </div>
-                <span class="col-lg-4 pt-2 text-light h5">{{ getContactName(call.phoneNumber) }}</span>
+                <span class="col-lg-3 pt-2 text-light h5">{{ getContactName(call.phoneNumber) }}</span>
                 <span class="col-lg-2 pt-2 text-light h6">
                   {{ hasContact(call.phoneNumber) ? call.phoneNumber : "" }}
                 </span>
+                <span class="col-lg-2 pt-2 text-light text-center small"> {{ parseTime(call.duration) }}</span>
                 <span class="col-lg-2 pt-2 text-light text-center small"> {{ call.type }}</span>
-                <span class="col-lg-3 pt-2 pr-4 text-light text-right">
+                <span class="col-lg-2 pt-2 pr-4 text-light text-right">
                   {{ call.datetime.time | date: 'dd MMM yy HH:mm' }}
                 </span>
               </div>
